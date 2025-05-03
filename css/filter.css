@@ -1,0 +1,40 @@
+.filter-model {
+    border-radius: .75rem;
+    margin: auto;
+    margin-bottom: 4rem;
+    width: 40%;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    padding: .5rem;
+}
+
+.filter-row {
+    display: flex;
+}
+
+.filter-title {
+    background: #30619F;
+    color: white;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+
+    border-top-right-radius: .75rem;
+    border-top-left-radius: .75rem;
+
+    padding: .625rem .125rem;
+    margin-bottom: .05rem;
+}
+
+.rounded-border-bottom {
+    border-bottom-right-radius: .75rem;
+    border-bottom-left-radius: .75rem;
+}

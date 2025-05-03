@@ -1,0 +1,189 @@
+.voter-box {
+    background: white;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.voter-box-title {
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    padding: .625rem;
+}
+
+.votacao-pauta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.show-vote {
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    border: 1px solid #ccc;
+
+    margin: -1rem;
+}
+
+.show-vote .left-vote-info{
+    display: flex;
+    align-items: center;
+}
+
+.show-vote img{
+    width: 4rem;
+    border-radius: 50%;
+
+    margin: .625rem;
+}
+
+.voter-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.voter-info span {
+    margin-bottom: .125rem;
+}
+
+.voter-name {
+    font-weight: bold;
+}
+
+.vote {
+    font-weight: bold;
+}
+
+.info-pauta-plenaria {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    margin-right: .625rem;
+}
+
+
+.right-chrono{
+    display: none;    
+    flex-direction: column;
+    align-items: center;
+}
+
+.chrono {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 2rem;
+}
+
+.left-chrono {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.chrono img {
+    width: 8rem;
+    border-radius: 50%;
+}
+
+.chrono-name {
+    font-weight: bold;
+}
+
+.chrono-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.chrono-time span {
+    display: flex;
+    justify-content: center;
+    font-size: 50pt;
+}
+
+.chrono-btn {
+    padding: .625rem;
+    margin: .125rem;
+    border: none;
+    border-radius: 8px;
+    color: white;
+}
+
+.chrono-time {
+    font-size: 2em;
+    color: #555; /* padrão */
+    transition: color 0.3s;
+}
+
+.chrono-paused {
+    color: blue;
+}
+
+.chrono-warning {
+    color: red;
+}
+
+.votacao-pauta {
+    border-bottom: 1px solid #ccc;
+}
+
+.destaque-vereador {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lista-vereadores {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    max-height: 400px; /* ou qualquer valor que funcione no seu layout */
+    overflow-y: auto;
+    gap: 10px;
+    padding-right: 10px; /* espaço pro scroll */
+}
+
+.item-vereador {
+    border-bottom: 1px solid #ccc;
+    display: flex;
+
+    align-items: center;
+    padding: .5rem;
+}
+
+.item-vereador img {
+    width: 3rem;
+    margin-right: .625rem;
+}
+
+.item-vereador.ativo {
+    background-color: #cce5ff;
+    border: 2px solid #0056b3;
+    border-radius: 6px;
+}
+
+.lista-vereadores, .destaque-vereador {
+    transition: all 0.3s ease;
+}
+
+.item-vereador.ativo {
+    background-color: #e0e0e0;
+    border-radius: 8px;
+}
+
+.info-box-title h4{
+    text-transform: uppercase;
+}
+
+.president-vote {
+    border-bottom: 1px solid #ccc;
+}

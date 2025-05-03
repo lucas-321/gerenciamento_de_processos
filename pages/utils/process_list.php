@@ -1,0 +1,357 @@
+<div class="filter-model search">
+
+    <ul id="filter-title" class="filter-title rounded-border-bottom">
+        <li>Filtro de Busca</li>
+        <li onclick="exibeFiltro(this)">Exibir</li>
+    </ul>
+
+    <form id="form-filter" method="GET" action="" style="display: none; margin-bottom: 20px;">
+
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="n_protocolo">Nº de Protocolo</label>
+                <input type="number" name="n_protocolo" placeholder="Nº de Protocolo" value="<?= isset($_GET['n_protocolo']) ? htmlspecialchars($_GET['n_protocolo']) : '' ?>">
+            </div>
+
+            <div class="filter-group">
+                <label for="interessado">Nome do Interessado</label>
+                <input type="text" name="interessado" placeholder="Pesquisar por nome" value="<?= isset($_GET['interessado']) ? htmlspecialchars($_GET['interessado']) : '' ?>">
+            </div>
+        </div>
+
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="data_inicial">Data Inicial</label>
+                <input type="date" name="data_inicial" value="<?= isset($_GET['data_inicial']) ? htmlspecialchars($_GET['data_inicial']) : '' ?>">
+            </div>
+
+            <div class="filter-group">
+                <label for="data_final">Data Final</label>
+                <input type="date" name="data_final" value="<?= isset($_GET['data_final']) ? htmlspecialchars($_GET['data_final']) : '' ?>">
+            </div>
+        </div>
+
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="cpf_cnpj">CPF ou CNPJ</label>
+                <input type="text" name="cpf_cnpj" placeholder="Pesquisar por CPF ou CNPJ" value="<?= isset($_GET['cpf_cnpj']) ? htmlspecialchars($_GET['cpf_cnpj']) : '' ?>">
+            </div>
+
+            <div class="filter-group">
+                <label for="assunto">Assunto</label>
+                <select id="assunto" name="assunto">
+                    <option value=""></option>
+                    <?php 
+                        $sql = "SELECT *
+                        FROM assuntos 
+                        WHERE ativo = 1
+                        ORDER BY nome";
+                        $result = mysqli_query($conexao, $sql);
+                        if(mysqli_num_rows($result) > 0) {
+                            while($dados = mysqli_fetch_assoc($result)){
+                                echo "<option value='$dados[id]'>$dados[nome]</option>";
+                            }
+                        }else{
+                            echo "<option value=''>Não há assuntos cadastrados</option>";
+                        }   
+                    ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="destiny-selection">
+            <span><b>Destino</b></span>
+            <div class="radios">
+                <label>
+                    <input type="radio" name="destino" value="usuario" onclick="mostrarSelect('usuario')"> Usuário
+                </label>
+                <label>
+                    <input type="radio" name="destino" value="setor" onclick="mostrarSelect('setor')">
+                    Setor
+                </label>
+                <label>
+                    <input type="radio" name="destino" value="pasta" onclick="mostrarSelect('pasta')">
+                    Pasta
+                </label>
+            </div>
+        </div>
+
+        <div id="usuario" class="form-group destino" style="display: none;">
+            <label for="usuario_localizado">Usuário Responsável</label>
+            <input type="text" name="usuario_localizado" placeholder="Buscar por usuário" value="<?= isset($_GET['usuario_localizado']) ? htmlspecialchars($_GET['usuario_localizado']) : '' ?>">
+        </div>
+
+        <div id="pasta" class="form-group destino" style="display: none;">
+            <label for="pasta_localizada">Pasta</label>
+            <input type="text" name="pasta_localizada" placeholder="Buscar por pasta" value="<?= isset($_GET['pasta_localizada']) ? htmlspecialchars($_GET['pasta_localizada']) : '' ?>">
+        </div>
+
+        <div id="setor" class="form-group destino" style="display: none;">
+            <label for="setor_localizado">Setor Encaminhado</label>
+            <input type="text" name="setor_localizado" placeholder="Buscar por setor" value="<?= isset($_GET['setor_localizado']) ? htmlspecialchars($_GET['setor_localizado']) : '' ?>">
+        </div>
+
+        <div class="form-group button">
+            <button type="submit" class="form-btn blue-btn">Buscar</button>
+        </div>
+
+    </form>
+
+</div>
+
+<div class="list-model">
+    <ul class="list-title">
+        <li>Nº Protocolo</li>
+        <li>Assunto</li>
+        <li>Interessado</li>
+        <!-- <li>Inscrição</li> -->
+        <!-- <li>Data de Entrada</li> -->
+        <li>Localização</li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
+    <?php
+
+        $porPagina = 10;
+        $pagina = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        if ($pagina < 1) $pagina = 1;
+        $offset = ($pagina - 1) * $porPagina;
+
+        $n_protocolo = isset($_GET['n_protocolo']) ? trim($_GET['n_protocolo']) : '';
+        $data_inicial = isset($_GET['data_inicial']) ? trim($_GET['data_inicial']) : '';
+        $data_final = isset($_GET['data_final']) ? trim($_GET['data_final']) : '';
+        $interessado = isset($_GET['interessado']) ? trim($_GET['interessado']) : '';
+        $cpf_cnpj = isset($_GET['cpf_cnpj']) ? trim($_GET['cpf_cnpj']) : '';
+        $assunto = isset($_GET['assunto']) ? trim($_GET['assunto']) : '';
+        $usuario_localizado = isset($_GET['usuario_localizado']) ? trim($_GET['usuario_localizado']) : '';
+
+        $condicoes = "WHERE processos.ativo = 1";
+
+        if (!empty($n_protocolo)) {
+            $condicoes .= " AND (n_protocolo = $n_protocolo)";
+        }
+
+        if (!empty($data_inicial)) {
+            $buscaSegura = mysqli_real_escape_string($conexao, $data_inicial);
+            $condicoes .= " AND (data_processo >= '$buscaSegura')";
+        }
+        
+        if (!empty($data_final)) {
+            $buscaSegura = mysqli_real_escape_string($conexao, $data_final);
+            $condicoes .= " AND (data_processo <= '$buscaSegura')";
+        }
+
+        if (!empty($interessado)) {
+            $buscaSegura = mysqli_real_escape_string($conexao, $interessado);
+            $condicoes .= " AND (nome_interessado LIKE '%$buscaSegura%')";
+        }
+
+        if (!empty($cpf_cnpj)) {
+            $buscaSegura = mysqli_real_escape_string($conexao, $cpf_cnpj);
+            $condicoes .= " AND (cpf_cnpj LIKE '%$cpf_cnpj%')";
+        }
+
+        if (!empty($assunto)) {
+            $condicoes .= " AND (assunto = $assunto)";
+        }
+
+        if (!empty($usuario_localizado)) {
+            $buscaSegura = mysqli_real_escape_string($conexao, $usuario_localizado);
+            $condicoes .= " AND (agentes.nome LIKE '%$buscaSegura%')";
+        }
+
+        if (!empty($pasta_localizada)) {
+            $buscaSegura = mysqli_real_escape_string($conexao, $pasta_localizada);
+            $condicoes .= " AND (pastas.nome LIKE '%$buscaSegura%')";
+        }
+
+        if (!empty($setor_localizado)) {
+            $buscaSegura = mysqli_real_escape_string($conexao, $setor_localizado);
+            $condicoes .= " AND (setores.nome LIKE '%$buscaSegura%')";
+        }
+        
+        // Agora vamos buscar a última localização também
+        $sql = "SELECT processos.*, 
+               assuntos.nome AS n_assunto, 
+               localizacoes.destino_id, 
+               localizacoes.destino_tipo,
+               agentes.nome AS nome_usuario_destino
+        FROM processos
+        INNER JOIN assuntos ON processos.assunto = assuntos.id
+        LEFT JOIN (
+            SELECT l1.*
+            FROM localizacoes l1
+            INNER JOIN (
+                SELECT id_processo, MAX(localizado_em) AS max_localizado
+                FROM localizacoes
+                WHERE ativo = 1
+                GROUP BY id_processo
+            ) l2 ON l1.id_processo = l2.id_processo AND l1.localizado_em = l2.max_localizado
+        ) AS localizacoes ON localizacoes.id_processo = processos.id
+        LEFT JOIN agentes ON localizacoes.destino_tipo = 'usuario' AND localizacoes.destino_id = agentes.id
+        $condicoes
+        ORDER BY processos.created_at DESC
+        LIMIT $porPagina OFFSET $offset";
+
+    $result = mysqli_query($conexao, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+
+        while ($dados = mysqli_fetch_assoc($result)) {
+
+            $destino_id = $dados['destino_id'];
+            $destino_tipo = $dados['destino_tipo'];
+            $destino_nome = "Não localizado";
+            $pendencia = $dados['pendencia'];
+
+            if (!empty($destino_id) && !empty($destino_tipo)) {
+                // Consultar o nome correto conforme o tipo
+                if ($destino_tipo == 'usuario') {
+                    $consulta = mysqli_query($conexao, "SELECT nome FROM agentes WHERE id = $destino_id");
+                } elseif ($destino_tipo == 'setor') {
+                    $consulta = mysqli_query($conexao, "SELECT nome FROM setores WHERE id = $destino_id");
+                } elseif ($destino_tipo == 'pasta') {
+                    $consulta = mysqli_query($conexao, "SELECT nome FROM pastas WHERE id = $destino_id");
+                }
+
+                if (!empty($consulta) && mysqli_num_rows($consulta) > 0) {
+                    $linha = mysqli_fetch_assoc($consulta);
+                    $destino_nome = $linha['nome'];
+                }
+            }
+
+            if($dados['status'] == 'Pendência'){
+                $btn = "<button class='list-btn yellow-btn' type='submit'>Pendência</button>";
+            }else{
+                $btn = "<button class='list-btn green-btn' type='submit'>Atribuir</button>";
+            }
+            
+
+            echo "<ul class='list-items'>
+                    <li>{$dados['n_protocolo']}/".date('Y', strtotime($dados['data_processo']))."</li>
+                    <li>{$dados['n_assunto']}</li>
+                    <li>{$dados['nome_interessado']}</li>
+                    <li>{$destino_nome}</li>";
+
+            if($dados['status'] != 'Finalizado'){
+                echo "<li>
+                            <form id='cadastroForm' method='POST' action='atribuir_processo.php'>
+                                <input type='hidden' name='id' value='$dados[id]'>
+                                <div class='form-group button'>
+                                    $btn
+                                </div>
+                            </form>
+                        </li>
+
+                        <li>
+                            <form id='cadastroForm' method='POST' action='editar_processo.php'>
+                                <input type='hidden' name='id' value='$dados[id]'>
+                                <div class='form-group button'>
+                                    <button class='list-btn blue-btn' type='submit'>Editar</button>
+                                </div>
+                            </form>
+                        </li>
+                        <li>
+                            <form id='deleteForm{$dados['id']}'>
+                                <input type='hidden' name='id' value='{$dados['id']}'>
+                                <button class='list-btn red-btn' type='submit' onclick='deletar(this)'>Excluir</button>
+                            </form>
+                        </li>";
+            }else{
+                echo "<li>
+                    <form id='cadastroForm' method='POST' action='atribuir_processo.php'>
+                        <input type='hidden' name='id' value='$dados[id]'>
+                        <div class='form-group button'>
+                            <button class='list-btn gray-btn' type='submit'>Acessar</button>
+                        </div>
+                    </form>
+                </li>
+                <li></li>
+                <li></li>";
+            }        
+                echo "</ul>";
+            }
+
+    }else{
+        echo "<div class='list-items'><span>Não há processos cadastrados</span></div>";
+    }
+                    
+            if ($_SESSION['categoria'] == 1 || $_SESSION['categoria'] == 2 || $_SESSION['categoria'] == 3) {
+
+                echo "<div class='list-items'>
+                        <a href='cadastro_processo.php'>
+                            <button class='list-btn blue-btn'>Novo Processo</button>
+                        </a>
+                    </div>";
+            }
+
+            $sqlTotal = "SELECT COUNT(*) as total 
+            FROM processos 
+            WHERE ativo = 1 AND id <> 1";
+            $resultTotal = mysqli_query($conexao, $sqlTotal);
+            $total = mysqli_fetch_assoc($resultTotal)['total'];
+
+            $totalPaginas = ceil($total / $porPagina);
+
+            // Botões de página
+            if ($totalPaginas > 1) {
+                echo "<div class='pagination'>";
+                
+                for ($i = 1; $i <= $totalPaginas; $i++) {
+                    if ($i == $pagina) {
+                        echo "<strong style='margin: 0 5px;'>$i</strong>"; // página atual destacada
+                    } else {
+                        echo "<a href='lista_processos.php?page=$i' style='margin: 0 5px;'>$i</a>"; // link para outras páginas
+                    }
+                }
+
+                echo "</div>";
+            }
+    ?>
+</div>
+
+<script>
+    function mostrarSelect(tipo) {
+        const elementos = ['usuario', 'pasta', 'setor'];
+
+        elementos.forEach(id => {
+            const el = document.getElementById(id);
+            el.style.display = (id === tipo) ? 'flex' : 'none';
+        });
+    }
+
+    function exibeFiltro(e) {
+        const titulo = document.getElementById('filter-title');
+        const form = document.getElementById('form-filter');
+
+        if(form.style.display === 'none') {
+            titulo.classList.remove('rounded-border-bottom');
+            form.style.display = 'block';
+            e.innerText = 'Ocultar';
+        }else{
+            titulo.classList.add('rounded-border-bottom');
+            form.style.display = 'none';
+            e.innerText = 'Exibir';
+        }
+    }
+
+    function deletar(botao) {
+        if (confirm('Você tem certeza que deseja excluir permanentemente este processo?')) {
+            const form = botao.closest("form");
+            const formData = new FormData(form);
+
+            fetch("../api/excluir_processo.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.mensagem);
+                location.reload();
+            });
+        }
+    }
+
+</script>

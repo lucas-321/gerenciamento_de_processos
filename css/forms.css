@@ -1,0 +1,165 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /* background-color: #f3f0e7; */
+    font-family: 'Roboto', 'sans-serif';
+}
+
+.form-model {
+    border-radius: .75rem;
+    margin: auto;
+    /* padding-top: 1rem; */
+    width: 40%;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+label {
+    color: #374151;
+    font-weight: 400;
+
+    margin: 0 .8rem;
+}
+
+input {
+    background: #f9fafb;
+    border: 1px solid #c0c4c9;
+    border-bottom: 2px solid #c0c4c9;
+    border-radius: .25rem;
+    margin: .625rem .8rem;
+    padding: .625rem;
+}
+
+select {
+    background: #f9fafb;
+    border: 1px solid #c0c4c9;
+    border-bottom: 2px solid #c0c4c9;
+    border-radius: .25rem;
+    margin: .625rem .8rem;
+    padding: .625rem;
+}
+
+textarea {
+    background: #f9fafb;
+    border: 1px solid #c0c4c9;
+    border-bottom: 2px solid #c0c4c9;
+    border-radius: .25rem;
+    margin: .625rem .8rem;
+    padding: .625rem;
+
+    height: 6rem;
+}
+
+.form-model {
+    margin-bottom: 4rem;
+}
+
+.form-btn {
+    max-width: 8rem;
+    min-width: 7.5rem;
+    border: none;
+    display: inline-block;
+    margin: .8rem;
+    padding: .7em 1em;
+    border-radius: 5px;
+    font-size: .875rem;
+    top: 1em;
+    right: 1em;
+    color: #fff;
+    font-weight: 500;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.green-btn {
+    background: #10b981;
+}
+
+.red-btn {
+    background: #b81233;
+}
+
+.gray-btn {
+    background: #aaa;
+}
+
+.blue-btn {
+    background: #1734da;
+}
+
+.yellow-btn {
+    background: #d4c009;
+}
+
+
+.login-box {
+    display: flex;
+    padding-top: 8rem;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+}
+
+#opcoes_vereador {
+    display: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: .625rem;
+    padding: .625rem;
+}
+
+#local-sessao {
+    display: none;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: .625rem;
+    padding: .625rem;
+}
+
+.sessao select option{
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+}
+
+.flex-row {
+    display: flex;
+}
+
+.flex-row select {
+    width: 75%;
+}
+
+.flex-row input {
+    width: 75%;
+}
+
+.search {
+    min-width: 65%;
+}
+
+
+@media (max-width: 600px) {
+
+    .login-box {
+        padding-top: 4rem;
+    }
+
+    .form-model {
+        width: 98%;
+    }
+}

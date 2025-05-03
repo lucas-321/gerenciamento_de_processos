@@ -1,0 +1,60 @@
+/* Estilo do Modal (inicialmente escondido) */
+.modal {
+    display: none; /* Escondido por padrão */
+    position: fixed; /* Fixa o modal na tela */
+    z-index: 1; /* Coloca o modal acima de outros elementos */
+    left: 0;
+    top: 0;
+    width: 100%; /* Largura total da tela */
+    height: 100%; /* Altura total da tela */
+    overflow: auto; /* Adiciona rolagem se necessário */
+    background-color: rgb(0,0,0); /* Cor de fundo do modal */
+    background-color: rgba(0,0,0,0.4); /* Cor de fundo com transparência */
+}
+
+/* Modal Conteúdo */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Alinha no centro da tela */
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: .75rem;
+    width: 80%; /* Largura do modal */
+    max-width: 500px; /* Largura máxima do modal */
+}
+
+.modal-title {
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+    padding: .625rem;
+    margin-bottom: .625rem;
+}
+
+/* Botão de Fechar */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilo do botão de adicionar assunto */
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #45a049;
+}

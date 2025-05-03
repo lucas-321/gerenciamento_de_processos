@@ -1,0 +1,53 @@
+.vote-box {
+    display: flex;
+    flex-direction: column;
+
+    background: white;
+    width: 90%;
+    margin-top: 2rem;
+
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.titulo-pauta {
+    text-align: center;
+    margin: .625rem;
+}
+
+.descricao-pauta {
+    padding: .125rem 1.5rem 1.5rem 1.5rem;
+    text-align: justify;
+    border-bottom: 1px solid #ccc;
+}
+
+.descricao-pauta p {
+    margin: .125rem .625rem;
+}
+
+.prop-box {
+    border-bottom: 1px solid #ccc;
+    padding: .625rem;
+}
+
+.prop {
+    display: flex;
+    align-items: center;
+}
+
+.prop span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-transform: uppercase;
+}
+.prop img{
+    width: 4rem;
+    border-radius: 50%;
+    margin: .625rem 2rem .625rem .625rem;
+}
+
+.vote-control {
+    display: flex;
+    justify-content: space-evenly;
+}

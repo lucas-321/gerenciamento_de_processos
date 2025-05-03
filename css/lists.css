@@ -1,0 +1,155 @@
+.list-box {
+    display: flex;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.list-model {
+    border-radius: .75rem;
+    margin: auto;
+    min-width: 65%;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.list-title {
+    /* background: #b81233; */
+    background: #30619F;
+    color: white;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+
+    border-top-right-radius: .75rem;
+    border-top-left-radius: .75rem;
+
+    padding: .625rem .125rem;
+    margin-bottom: .05rem;
+}
+
+ul li {
+    min-width: 10rem;
+    max-width: 10rem;
+    text-align: center;
+}
+
+.list-items {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    padding: .125rem;
+
+    font-size: 10pt;
+
+    border-bottom: 2px solid #c0c4c9;
+}
+
+.list-items li{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    margin: 0 .5rem;
+}
+
+.item-list-painel img{
+    width: 4rem;
+    border-radius: 50%;
+    margin: .625rem;
+}
+
+.logo-partido img{
+    width: 4rem;
+    margin: .625rem;
+}
+
+
+
+.filter {
+    border-radius: .75rem;
+    margin: auto;
+    width: 65%;
+    max-width: 65%;
+    background: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    margin-bottom: 2rem;
+}
+
+.filter-title {
+    /* background: #b81233; */
+    background: #346cb0;
+    color: white;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+
+    border-top-right-radius: .75rem;
+    border-top-left-radius: .75rem;
+
+    padding: .625rem .125rem;
+    margin-bottom: 1rem;
+}
+
+.filter-title li{
+    cursor: pointer;
+}
+
+#form-filter {
+    display: none;
+}
+
+.ctrl {
+    display: none;
+}
+
+.coord-ctrl {
+    display: none;
+}
+
+.assist-ctrl {
+    display: none;
+    background: red;
+}
+
+.list-btn {
+    border: none;
+    display: inline-block;
+    margin: .8rem;
+    padding: .7em 1em;
+    border-radius: 5px;
+    font-size: .875rem;
+    top: 1em;
+    right: 1em;
+    color: #fff;
+    font-weight: 500;
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: pointer;
+}
+
+.process-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.destiny-selection {
+    margin: 1.5rem .125rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.destiny-options {
+    margin: 1.5rem .125rem;
+    width: 100%;
+    flex-direction: column;
+}
+
+.radios {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}

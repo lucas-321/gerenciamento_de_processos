@@ -1,0 +1,239 @@
+<?php
+// session_start();
+// if (!isset($_SESSION['usuario_id'])) {
+//     header("Location: ./index.php");
+//     exit;
+// }
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastro de Usuário</title>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/forms.css">
+  <link rel="stylesheet" href="../css/lists.css">
+  <link rel="stylesheet" href="../css/pagination.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+<body>
+
+  <?php include('header.php'); 
+    
+    if (!isset($_SESSION['usuario_id'])) {
+        header("Location: ./index.php");
+        exit;
+    }
+
+  ?>
+
+  <div class="content list-box">
+
+        <div class="form-model search">
+
+            <ul class="list-title">
+                <li>Busca de usuário</li>
+            </ul>
+
+            <form method="GET" action="" style="margin-bottom: 20px;">
+
+                <div class="form-group">
+                    <label for="busca">Nome ou CPF</label>
+                    <input type="text" name="busca" placeholder="Pesquisar por nome ou CPF" value="<?= isset($_GET['busca']) ? htmlspecialchars($_GET['busca']) : '' ?>">
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria">Categoria</label>
+                    <select name="categoria">
+                        <option value="">Todas</option>
+                        <!--<option value="1" <?= (isset($_GET['categoria']) && $_GET['categoria'] == '1') ? 'selected' : '' ?>>Administrador</option>-->
+                        <option value="2" <?= (isset($_GET['categoria']) && $_GET['categoria'] == '2') ? 'selected' : '' ?>>Coordenador</option>
+                        <option value="3" <?= (isset($_GET['categoria']) && $_GET['categoria'] == '3') ? 'selected' : '' ?>>Protocolo</option>
+                        <option value="4" <?= (isset($_GET['categoria']) && $_GET['categoria'] == '4') ? 'selected' : '' ?>>Analista</option>
+                        <option value="5" <?= (isset($_GET['categoria']) && $_GET['categoria'] == '5') ? 'selected' : '' ?>>Externo</option>
+                    </select>
+                </div>
+
+                <div class="form-group button">
+                    <button type="submit" class="form-btn blue-btn">Buscar</button>
+                </div>
+
+            </form>
+
+        </div>
+
+        <div class="list-model">
+
+            <ul class="list-title">
+                <li>Usuário</li>
+                <li>Nome</li>
+                <li>Categoria</li>
+                <li></li>
+                <li></li>
+            </ul>
+
+            <?php 
+            include('../api/conexao.php');
+
+            $limite = 10; // Quantos usuários por página
+            $pagina = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            if ($pagina < 1) $pagina = 1;
+            $inicio = ($pagina - 1) * $limite;
+
+            $busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';
+            $categoriaFiltro = isset($_GET['categoria']) ? trim($_GET['categoria']) : '';
+
+            $condicoes = "WHERE agentes.ativo = 1 AND agentes.id <> 1";
+
+            if (!empty($busca)) {
+                $buscaSegura = mysqli_real_escape_string($conexao, $busca);
+                $condicoes .= " AND (agentes.nome LIKE '%$buscaSegura%' OR agentes.cpf LIKE '%$buscaSegura%')";
+            }
+
+            if (!empty($categoriaFiltro)) {
+                $categoriaSegura = (int)$categoriaFiltro;
+                $condicoes .= " AND usuarios.categoria = $categoriaSegura";
+            }
+
+            // Consulta principal
+            $sql = "SELECT agentes.id, nome, categoria, foto
+            FROM agentes
+            INNER JOIN usuarios ON agentes.id = usuarios.agente_id
+            $condicoes 
+            ORDER BY agentes.created_at DESC 
+            LIMIT $inicio, $limite";
+            $result = mysqli_query($conexao, $sql);
+
+            if (mysqli_num_rows($result) > 0) {
+                while ($dados = mysqli_fetch_assoc($result)) {
+
+                    $categoria = $dados['categoria'];
+
+                    switch ($categoria) {
+                        case 1:
+                            $n_categoria = "Administrador";
+                            break;
+                        case 2:
+                            $n_categoria = "Coordenador";
+                            break;
+                        case 3:
+                            $n_categoria = "Protocolo";
+                            break;
+                        case 4:
+                            $n_categoria = "Analista";
+                            break;
+                        case 5:
+                            $n_categoria = "Externo";
+                            break;
+                    }
+
+                    echo "<ul class='list-items'>
+                            <li>
+                                <div class='item-list-painel'>
+                                    <img src='../fotos_perfil/{$dados['foto']}' alt='img-perfil'>
+                                </div>
+                            </li>
+                            <li>{$dados['nome']}</li>
+                            <li>{$n_categoria}</li>
+                            <li>
+                                <form method='POST' action='editar_usuario.php'>
+                                    <input type='hidden' name='id' value='{$dados['id']}'>
+                                    <button class='list-btn blue-btn' type='submit'>Editar</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form id='deleteForm{$dados['id']}'>
+                                    <input type='hidden' name='id' value='{$dados['id']}'>
+                                    <button class='list-btn red-btn' type='submit' onclick='deletar(this)'>Excluir</button>
+                                </form>
+                            </li>
+                        </ul>";
+                }
+            } else {
+                echo "<div class='list-items'>Nenhum usuário encontrado.</div>";
+            }
+
+            if ($_SESSION['categoria'] == 1 || $_SESSION['categoria'] == 2) {
+                echo "<div class='list-items'>
+                        <a href='cadastro_usuario.php'>
+                            <button class='list-btn blue-btn'>Novo Usuário</button>
+                        </a>
+                    </div>";
+            }
+
+            // Paginação
+            $sqlTotal = "SELECT COUNT(*) as total 
+            FROM agentes
+            INNER JOIN usuarios ON agentes.id = usuarios.agente_id 
+            $condicoes";
+            $resultTotal = mysqli_query($conexao, $sqlTotal);
+            $total = mysqli_fetch_assoc($resultTotal)['total'];
+
+            $totalPaginas = ceil($total / $limite);
+
+            if ($totalPaginas > 1) {
+                echo "<div class='pagination'>";
+
+                $arquivoAtual = basename($_SERVER['PHP_SELF']);
+                $queryString = $_GET;
+                unset($queryString['page']); // remove page pra não duplicar
+
+                $parametros = !empty($queryString) ? '&' . http_build_query($queryString) : '';
+
+                // Botão Anterior
+                if ($pagina > 1) {
+                    $paginaAnterior = $pagina - 1;
+                    echo "<a href='{$arquivoAtual}?page=$paginaAnterior$parametros'>&laquo; Anterior</a>";
+                }
+
+                // Botões numerados
+                for ($i = 1; $i <= $totalPaginas; $i++) {
+                    if ($i == $pagina) {
+                        echo "<strong style='margin: 0 5px;'>$i</strong>";
+                    } else {
+                        echo "<a href='{$arquivoAtual}?page=$i$parametros' style='margin: 0 5px;'>$i</a>";
+                    }
+                }
+
+                // Botão Próximo
+                if ($pagina < $totalPaginas) {
+                    $paginaProxima = $pagina + 1;
+                    echo "<a href='{$arquivoAtual}?page=$paginaProxima$parametros'>Próximo &raquo;</a>";
+                }
+
+                echo "</div>";
+            }
+            ?>
+        </div>
+
+</div>
+
+</body>
+
+<script>
+
+    // const excluir = document.querySelector("#excluir");
+    const texto = 'Você tem certeza que deseja excluir permanentemente este usuário?';
+
+    function deletar(botao) {
+        if (confirm(texto)) {
+            const form = botao.closest("form");
+            const formData = new FormData(form);
+
+            fetch("../api/excluir_usuario.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.mensagem);
+                location.reload();
+            });
+        }
+    }
+
+</script>
+</html>
