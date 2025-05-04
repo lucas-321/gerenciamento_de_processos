@@ -197,11 +197,11 @@
         echo "<div class='total-geral'>Total geral: $totalGeral processo(s)</div>";
 
         echo "<!-- Botão de impressão -->
-            <!--<div style='text-align: right; margin-bottom: 15px;'>
+            <div style='text-align: right; margin-bottom: 15px;'>
                 <a href='report_print.php'>
                     <button onclick='window.print()' class='form-btn blue-btn'>Imprimir</button>
                 </a>
-            </div>-->";
+            </div>";
             
     } else {
         echo "<div class='list-items'><span>Não há processos cadastrados</span></div>";
@@ -221,14 +221,5 @@ function toggleBloco(titulo) {
         conteudo.style.display = 'block';
         icone.textContent = '[-]';
     }
-}
-
-function mostrarSelect(tipo) {
-    const elementos = ['usuario', 'pasta', 'setor'];
-
-    elementos.forEach(id => {
-        const el = document.getElementById(id);
-        el.style.display = (id === tipo) ? 'flex' : 'none';
-    });
 }
 </script>

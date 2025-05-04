@@ -2,15 +2,10 @@
 session_start();
 include("conexao.php");
 
-// if ($_SESSION["categoria"] != 1) {
-//     echo json_encode(["mensagem" => "Acesso negado. Apenas Administradores podem alterar processos."]);
-//     exit;
-// }
-
 $id = $_POST["id"];
 $status = $_POST["status"];
-// $pendencia = isset($_POST["pendencia"]) && !empty($_POST["pendencia"])? $_POST["pendencia"]: null;
 $pendencia = $_POST["pendencia"];
+$agente_id = $_SESSION["agente_id"];
 
 // Foto (opcional)
 // $foto_nome = null;
@@ -29,10 +24,9 @@ $conexao->begin_transaction();
 
 try {
     // Monta a query de UPDATE do processo dinamicamente
-    $queryProcesso = "UPDATE processos 
-    SET status = ?, pendencia = ?";
-    $params = [$status, $pendencia];
-    $types = "ss";
+    $queryProcesso = "UPDATE processos SET status = ?, pendencia = ? WHERE id = ?";
+    $paramsProcesso = [$status, $pendencia, $id];
+    $typesProcesso = "ssi";
 
     // if ($pendencia) {
     //     $queryProcesso .= ", pendencia = ?";
@@ -46,16 +40,39 @@ try {
     //     $types .= "s";
     // }
 
-    $queryProcesso .= " WHERE id = ?";
-    $params[] = $id;
-    $types .= "i";
+    $stmtProcesso = $conexao->prepare($queryProcesso);
+    $stmtProcesso->bind_param($typesProcesso, ...$paramsProcesso);
+    $stmtProcesso->execute();
 
-    $stmt = $conexao->prepare($queryProcesso);
-    $stmt->bind_param($types, ...$params);
-    $stmt->execute();
+    $queryLocalizacoes = "UPDATE localizacoes 
+        SET recebido_em = NOW() 
+        WHERE destino_tipo = 'usuario' 
+        AND destino_id = ? 
+        AND id_processo = ?
+        AND recebido_em IS NULL";
+    $paramsLocalizacao = [$agente_id, $id];
+    $typesLocalizacao = "ii";
 
+    $stmtLocalizacao = $conexao->prepare($queryLocalizacoes);
+    $stmtLocalizacao->bind_param($typesLocalizacao, ...$paramsLocalizacao);
+    $stmtLocalizacao->execute();
+
+    // --- Log da alteração ---
+    $acao = "Atualização de status e pendência do processo";
+    $detalhes = "Status: $status; Pendência: $pendencia";
+    
+    $queryLog = "INSERT INTO logs_processo (id_processo, agente_id, acao, detalhes) 
+                    VALUES (?, ?, ?, ?)";
+    $paramsLog = [$id, $agente_id, $acao, $detalhes];
+    $typesLog = "iiss";
+
+    $stmtLog = $conexao->prepare($queryLog);
+    $stmtLog->bind_param($typesLog, ...$paramsLog);
+    $stmtLog->execute();
+
+    // Commita tudo
     $conexao->commit();
-    echo json_encode(["mensagem" => "Processo alterado com sucesso."]);
+    echo json_encode(["mensagem" => "Análise Registrada."]);
 
 } catch (Exception $e) {
     $conexao->rollback();

@@ -52,9 +52,24 @@
                         <li class="nav-item">
                             <a href='painel.php'>Usuários</a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href='lista_processos.php'>Processos</a>
+                        </li> -->
+                        <!-- Processos -->
+                        <li class="nav-item nav-list" onclick="toggleSubmenu(this)">
+                            <span><a href='#'>Processos</a></span>
+                            <ul>
+
+                                <li class="subitem">
+                                    <a href='lista_processos.php'>Geral</a>
+                                </li>
+                                <li class="subitem">
+                                    <a href='painel_analista.php'>Meus Processos</a>
+                                </li>
+
+                            </ul>
                         </li>
+                        <!-- Fim -->
                         <li class="nav-item">
                             <a href='lista_assuntos.php'>Assuntos</a>
                         </li>
@@ -75,12 +90,16 @@
                         </li>
                         <!-- Fim -->
                          
-                        <li class="nav-item nav-list" onclick="toggleSubmenu(this)">
+                        <!-- <li class="nav-item nav-list" onclick="toggleSubmenu(this)">
                             <span><a href='#'>Relatórios</a></span>
                             <ul>
                                 <li class="subitem"><a href="relatorios.php">Processos</a></li>
                                 <li class="subitem"><a href="relatorios.php">Usuários</a></li>
                             </ul>
+                        </li> -->
+
+                        <li class="nav-item">
+                            <a href='relatorios.php'>Relatório</a>
                         </li>
                 <?php
                     }else if ($_SESSION["categoria"] == 3) {

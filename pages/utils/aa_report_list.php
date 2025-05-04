@@ -227,24 +227,6 @@
             }else{
                 $btn = "<button class='list-btn green-btn' type='submit'>Atribuir</button>";
             }
-
-            if($destino_tipo != 'usuario'){
-                $form = "<form id='cadastroForm' method='POST' action='atribuir_processo.php'>
-                                <input type='hidden' name='id' value='$dados[id]'>
-                                <div class='form-group button'>
-                                    $btn
-                                </div>
-                            </form>";
-            }else if($destino_id == $_SESSION['agente_id'] || $destino_nome == "Não localizado"){
-                $form = "<form id='cadastroForm' method='POST' action='atribuir_processo.php'>
-                                <input type='hidden' name='id' value='$dados[id]'>
-                                <div class='form-group button'>
-                                    $btn
-                                </div>
-                            </form>";
-            }else{
-                $form = "<button class='list-btn gray-btn' type='submit'>Já Atribuído</button>";
-            }
             
 
             echo "<ul class='list-items'>
@@ -254,7 +236,14 @@
                     <li>{$destino_nome}</li>";
 
             if($dados['status'] != 'Finalizado'){
-                echo "<li>$form</li>
+                echo "<li>
+                            <form id='cadastroForm' method='POST' action='atribuir_processo.php'>
+                                <input type='hidden' name='id' value='$dados[id]'>
+                                <div class='form-group button'>
+                                    $btn
+                                </div>
+                            </form>
+                        </li>
 
                         <li>
                             <form id='cadastroForm' method='POST' action='editar_processo.php'>
