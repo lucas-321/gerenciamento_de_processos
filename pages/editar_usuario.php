@@ -28,7 +28,7 @@
             exit;
         }
 
-        $sql = "SELECT agentes.nome AS a_nome, sexo, cpf, data_nascimento, categoria, login
+        $sql = "SELECT agentes.nome AS a_nome, usuarios.id AS u_id, matricula, sexo, cpf, data_nascimento, categoria, login
         FROM agentes
         INNER JOIN usuarios ON agentes.id = agente_id
         WHERE agentes.id = $_POST[id]";
@@ -39,11 +39,13 @@
 
             while($dados = mysqli_fetch_assoc($result)){
               $nome = $dados['a_nome'];
+              $matricula = $dados['matricula'];
               $sexo = $dados['sexo'];
               $cpf = $dados['cpf'];
               $data_nascimento = $dados['data_nascimento'];
               $categoria = $dados['categoria'];
               $login = $dados['login'];
+              $id_usuario = $dados['u_id'];
 
               switch ($categoria) {
                   case 1:
@@ -78,11 +80,16 @@
 
           <form id="cadastroForm" enctype="multipart/form-data">
 
-            <input type="hidden" name="id" value="<?php echo $_POST['id']; ?>">
+            <input type="hidden" id="usuario_id" name="id" value="<?php echo $_POST['id']; ?>">
 
             <div class="form-group">
               <label>Nome</label>
               <input type="text" id="nome" name="nome" placeholder="Nome" value="<?php echo "$nome";?>" required>
+            </div>
+
+            <div class="form-group">
+              <label>Matrícula</label>
+              <input type="text" id="matricula" name="matricula" placeholder="Matrícula" value="<?php echo "$matricula";?>" required>
             </div>
 
             <div class="form-group">
@@ -148,6 +155,26 @@
   </div>
 
   <script>
+    const loginInput = document.getElementById("login");
+    const usuarioId = <?php echo $id_usuario; ?>; // agora vai funcionar
+
+    loginInput.addEventListener("blur", () => {
+      const login = loginInput.value.trim();
+      if (login !== "") {
+        fetch(`../api/verifica_login.php?login=${encodeURIComponent(login)}&id=${usuarioId}`)
+          .then(res => res.json())
+          .then(data => {
+            if (!data.disponivel) {
+              alert(data.mensagem);
+              loginInput.value = "";
+              loginInput.style.borderColor = "red";
+            } else {
+              loginInput.style.borderColor = "green";
+            }
+          });
+      }
+    });
+
     document.getElementById("cadastroForm").addEventListener("submit", function(e) {
       e.preventDefault();
 

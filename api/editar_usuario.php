@@ -9,6 +9,7 @@ include("conexao.php");
 
 $id = $_POST["id"];
 $nome = $_POST["nome"];
+$matricula = $_POST["matricula"];
 $sexo = $_POST["sexo"];
 $cpf = $_POST["cpf"];
 $data_nascimento = $_POST["data_nascimento"];
@@ -37,9 +38,9 @@ $conexao->begin_transaction();
 
 try {
     // Monta a query de UPDATE do agente dinamicamente
-    $queryAgente = "UPDATE agentes SET nome = ?, sexo = ?, data_nascimento = ?, cpf = ?";
-    $params = [$nome, $sexo, $data_nascimento, $cpf];
-    $types = "ssss";
+    $queryAgente = "UPDATE agentes SET nome = ?, matricula = ?, sexo = ?, data_nascimento = ?, cpf = ?";
+    $params = [$nome, $matricula, $sexo, $data_nascimento, $cpf];
+    $types = "sssss";
 
     if ($foto_nome) {
         $queryAgente .= ", foto = ?";

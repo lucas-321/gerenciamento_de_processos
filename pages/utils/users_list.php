@@ -12,6 +12,11 @@
         </div>
 
         <div class="form-group">
+            <label for="matricula">Matrícula</label>
+            <input type="text" name="matricula" placeholder="Pesquisar por Matrícula" value="<?= isset($_GET['matricula']) ? htmlspecialchars($_GET['matricula']) : '' ?>">
+        </div>
+
+        <div class="form-group">
             <label for="categoria">Categoria</label>
             <select name="categoria">
                 <option value="">Todas</option>
@@ -36,6 +41,7 @@
     <ul class="list-title">
         <li>Usuário</li>
         <li>Nome</li>
+        <li>Matrícula</li>
         <li>Categoria</li>
         <li></li>
         <li></li>
@@ -51,6 +57,7 @@
 
     $busca = isset($_GET['busca']) ? trim($_GET['busca']) : '';
     $categoriaFiltro = isset($_GET['categoria']) ? trim($_GET['categoria']) : '';
+    $matriculaFiltro = isset($_GET['matricula']) ? trim($_GET['matricula']) : '';
 
     $condicoes = "WHERE agentes.ativo = 1 AND agentes.id <> 1";
 
@@ -64,8 +71,13 @@
         $condicoes .= " AND usuarios.categoria = $categoriaSegura";
     }
 
+    if (!empty($matriculaFiltro)) {
+        $matriculaSegura = (int)$matriculaFiltro;
+        $condicoes .= " AND agentes.matricula LIKE '%$matriculaSegura%'";
+    }
+
     // Consulta principal
-    $sql = "SELECT agentes.id, nome, categoria, foto
+    $sql = "SELECT agentes.id, nome, matricula, categoria, foto
     FROM agentes
     INNER JOIN usuarios ON agentes.id = usuarios.agente_id
     $condicoes
@@ -103,6 +115,7 @@
                         </div>
                     </li>
                     <li>{$dados['nome']}</li>
+                    <li>{$dados['matricula']}</li>
                     <li>{$n_categoria}</li>
                     <li>
                         <form method='POST' action='editar_usuario.php'>

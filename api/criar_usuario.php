@@ -9,6 +9,7 @@ if ($_SESSION["categoria"] != 1 && $_SESSION["categoria"] != 2) {
 
 // Dados do agente vindos do formulário
 $nome = $_POST["nome"];
+$matricula = $_POST["matricula"];
 $sexo = $_POST["sexo"];
 $cpf = $_POST["cpf"];
 $data_nascimento = $_POST["data_nascimento"];
@@ -32,12 +33,24 @@ if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
     }
 }
 
+//Verifica se o login já foi cadastrado
+$stmt_verifica = $conexao->prepare("SELECT id FROM usuarios WHERE login = ? AND ativo = 1");
+$stmt_verifica->bind_param("s", $login);
+$stmt_verifica->execute();
+$stmt_verifica->store_result();
+
+if ($stmt_verifica->num_rows > 0) {
+    echo json_encode(["mensagem" => "Este login já está em uso. Por favor, escolha outro."]);
+    exit;
+}
+//Fim
+
 $conexao->begin_transaction();
 
 try {
     // 1. Inserir agente
-    $stmt = $conexao->prepare("INSERT INTO agentes (nome, sexo, data_nascimento, cpf, foto, ativo, created_at, criado_por) VALUES (?, ?, ?, ?, ?, 1, NOW(), ?)");
-    $stmt->bind_param("sssssi", $nome, $sexo, $data_nascimento, $cpf, $foto_nome, $criado_por);
+    $stmt = $conexao->prepare("INSERT INTO agentes (nome, matricula, sexo, data_nascimento, cpf, foto, ativo, created_at, criado_por) VALUES (?, ?, ?, ?, ?, ?, 1, NOW(), ?)");
+    $stmt->bind_param("ssssssi", $nome, $matricula, $sexo, $data_nascimento, $cpf, $foto_nome, $criado_por);
     $stmt->execute();
     $agente_id = $stmt->insert_id;
 

@@ -1,0 +1,58 @@
+.assunto-bloco {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.assunto-titulo {
+    background-color: #f0f0f0;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.assunto-conteudo {
+    display: none;
+    padding: 10px;
+}
+
+.list-items {
+    list-style: none;
+    padding-left: 0;
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0;
+}
+
+.list-items li {
+    display: inline-block;
+    width: 24%;
+}
+
+.total-geral {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 10px;
+}
+
+.list-title li {
+    display: flex;
+    width: 20rem;
+    border: 1px solid black;
+}
+
+@media print {
+    #assunto-bloco {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    .list-header {
+        display: none;
+    }
+}

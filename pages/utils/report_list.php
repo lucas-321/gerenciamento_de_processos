@@ -1,65 +1,13 @@
 <?php
     include('process_filter.php');
 ?>
-
-<style>
-    .assunto-bloco {
-        margin-bottom: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    .assunto-titulo {
-        background-color: #f0f0f0;
-        padding: 10px;
-        font-weight: bold;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .assunto-conteudo {
-        display: none;
-        padding: 10px;
-    }
-
-    .list-items {
-        list-style: none;
-        padding-left: 0;
-        border-bottom: 1px solid #ddd;
-        padding: 5px 0;
-    }
-
-    .list-items li {
-        display: inline-block;
-        width: 24%;
-    }
-
-    .total-geral {
-        margin-top: 20px;
-        font-weight: bold;
-        font-size: 1.1em;
-        padding: 10px;
-    }
-
-    @media print {
-        #assunto_bloco {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-        }
-    }
-</style>
+<link rel="stylesheet" href="../css/report.css">
 
 <div class="list-model">
 
-<ul class="list-title">
-    <li>Relatório de Processos</li>
-</ul>
-
 <?php
+    $periodo = 'em período não especificado';
+    $analista = '';
     $condicoes = "WHERE processos.ativo = 1";
 
     $n_protocolo = isset($_GET['n_protocolo']) ? trim($_GET['n_protocolo']) : '';
@@ -69,8 +17,6 @@
     $cpf_cnpj = isset($_GET['cpf_cnpj']) ? trim($_GET['cpf_cnpj']) : '';
     $assunto = isset($_GET['assunto']) ? trim($_GET['assunto']) : '';
     $usuario_localizado = isset($_GET['usuario_localizado']) ? trim($_GET['usuario_localizado']) : '';
-
-    $condicoes = "WHERE processos.ativo = 1";
 
     if (!empty($n_protocolo)) {
         $condicoes .= " AND (n_protocolo = $n_protocolo)";
@@ -115,8 +61,21 @@
         $condicoes .= " AND (setores.nome LIKE '%$buscaSegura%')";
     }
 
+    if (!empty($data_inicial) && !empty($data_final)) {
+        $periodo = "Entre ".date('d/m/Y', strtotime($data_inicial))." e ".date('d/m/Y', strtotime($data_final))."";
+    } else if (!empty($data_inicial)) {
+        $periodo = "A partir de ".date('d/m/Y', strtotime($data_inicial))."";
+    } else if (!empty($data_final)) {
+        $periodo = "Até ".date('d/m/Y', strtotime($data_final))."";
+    }
+
+    echo "<div class='list-title'>
+            <span>Relatório de Processos $periodo</span>
+        </div>";
+
     $sql = "SELECT processos.*, 
                    assuntos.nome AS n_assunto,
+                   data_processo,
                    localizacoes.destino_id, 
                    localizacoes.destino_tipo,
                    agentes.nome AS nome_usuario_destino
@@ -156,10 +115,10 @@
                   </div>";
             echo "<div class='assunto-conteudo'>";
 
-            echo "<ul class='list-items' style='font-weight: bold;'>
+            echo "<ul class='list-items list-header' style='font-weight: bold;'>
                     <li>Nº Protocolo</li>
                     <li>Interessado</li>
-                    <li>Assunto</li>
+                    <li>Data de Entrada</li>
                     <li>Localização</li>
                   </ul>";
 
@@ -167,6 +126,7 @@
                 $destino_id = $dados['destino_id'];
                 $destino_tipo = $dados['destino_tipo'];
                 $destino_nome = "Não localizado";
+                $data_entrada = date('d/m/Y', strtotime($dados['data_processo']));
 
                 if (!empty($destino_id) && !empty($destino_tipo)) {
                     if ($destino_tipo == 'usuario') {
@@ -186,7 +146,7 @@
                 echo "<ul class='list-items'>
                         <li>{$dados['n_protocolo']}/" . date('Y', strtotime($dados['data_processo'])) . "</li>
                         <li>{$dados['nome_interessado']}</li>
-                        <li>{$dados['n_assunto']}</li>
+                        <li>{$data_entrada}</li>
                         <li>{$destino_nome}</li>
                       </ul>";
             }
@@ -201,7 +161,10 @@
                 <a href='report_print.php'>
                     <button onclick='window.print()' class='form-btn blue-btn'>Imprimir</button>
                 </a>
-            </div>-->";
+            </div>-->
+            <div style='text-align: right; margin-bottom: 15px;'>
+                <button onclick='imprimirRelatorio()' class='form-btn blue-btn'>Imprimir</button>
+            </div>";
             
     } else {
         echo "<div class='list-items'><span>Não há processos cadastrados</span></div>";
@@ -230,5 +193,41 @@ function mostrarSelect(tipo) {
         const el = document.getElementById(id);
         el.style.display = (id === tipo) ? 'flex' : 'none';
     });
+}
+
+
+
+
+
+function imprimirRelatorio() {
+    const conteudo = document.querySelector('.list-model').innerHTML;
+    const estilo = `
+      <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        li { width: 9rem;}
+        .icone { display: none; }
+        .list-model { width: 100%; }
+        .assunto-bloco {margin-top: 2rem;}
+        .list-items, .assunto-bloco { margin-bottom: 10px; }
+        .list-title li { width: 100%; text-align: center; font-size: 20px; font-weight: bold; list-style: none; }
+        .list-items { display: flex; gap: 10px; list-style: none; padding: 5px 0; border-bottom: 1px solid #ccc; }
+        .total-geral { margin-top: 20px; font-weight: bold; }
+        .form-btn { display: none; }
+      </style>
+    `;
+
+    const janela = window.open('', '', 'width=900,height=600');
+    janela.document.write('<html><head><title>Relatório de Processos</title>');
+    janela.document.write(estilo);
+    janela.document.write('</head><body>');
+    janela.document.write(conteudo);
+    janela.document.write('</body></html>');
+    janela.document.close();
+
+    janela.onload = () => {
+        janela.focus();
+        janela.print();
+        janela.close();
+    };
 }
 </script>

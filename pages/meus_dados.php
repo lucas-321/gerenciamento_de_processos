@@ -22,7 +22,7 @@
         $sql = "SELECT agentes.nome AS a_nome, sexo, cpf, data_nascimento, categoria, login
         FROM agentes
         INNER JOIN usuarios ON agentes.id = agente_id
-        WHERE agentes.id = $_SESSION[usuario_id]";
+        WHERE agentes.id = $_SESSION[agente_id]";
 
         $result = mysqli_query($conexao, $sql);
 
