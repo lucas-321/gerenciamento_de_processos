@@ -142,16 +142,21 @@
                     <label for="usuario"><b>Documento Elaborado:</b></label>
                     <div class="radios">
                         <label>
-                            <input type="radio" name="status" value="Despacho elaborado" onclick="mostrarArquivo('arquivos')">Despacho
+                            <input type="radio" name="status" value="Despacho elaborado" onclick="mostrarArquivo('arquivos'), showBtn('despacho')">Despacho
+
+                            <button id="despachoBtn" class="form-btn green-btn" style="display: none;" type="button" onclick="criarDespacho()">Criar Despacho</button>
+
                         </label>
                         <label>
-                            <input type="radio" name="status" value="Certidão elaborada" onclick="mostrarArquivo('arquivos')">Certidão
+                            <input type="radio" name="status" value="Certidão elaborada" onclick="mostrarArquivo('arquivos'), showBtn('certidao')">Certidão
+
+                            <button id="certidaoBtn" class="form-btn green-btn" style="display: none;" type="button" onclick="showBtn('certidao')">Criar Certidão</button>
                         </label>
                     </div>
 
-                    <div id="arquivos">
+                    <!--<div id="arquivos">
                         <input type="file" name="arquivo" id="arquivo">
-                    </div>
+                    </div>-->
                 </div>
 
                 <div id="pendencia-box" class="destiny-options" style="display:none;">
@@ -213,6 +218,42 @@
             document.getElementById('arquivo').style.display = 'flex';
         }
     }
+
+    //Teste de Elaboração de Despacho
+
+    function showBtn(documento){
+        // Esconde todos primeiro
+        document.getElementById('despachoBtn').style.display = 'none';
+        document.getElementById('certidaoBtn').style.display = 'none';
+
+        // Mostra apenas o que foi selecionado
+        if (documento === 'despacho') {
+            document.getElementById('despachoBtn').style.display = 'flex';
+        } else if (documento === 'certidao') {
+            document.getElementById('certidaoBtn').style.display = 'flex';
+        }
+    }
+
+    function criarDespacho() {
+        const id = document.querySelector("input[name='id']").value;
+
+        // Cria um form temporário para enviar os dados via POST
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "elaborar_despacho.php";
+
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "id";
+        input.value = id;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    //Fim
+
   </script>
 
 </body>

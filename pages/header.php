@@ -154,7 +154,9 @@
                     </a>
 
                     <ul>
-                        <li class="subitem"><a href="meus_dados.php">Meus Dados</a></li>
+                        <?php if ($_SESSION["categoria"] == 1 || $_SESSION["categoria"] == 2 ) { ?>
+                            <li class="subitem"><a href="meus_dados.php">Meus Dados</a></li>
+                        <?php } ?>
                         <li class="subitem"><a href="../logout.php">Sair</a></li>
                     </ul>
 

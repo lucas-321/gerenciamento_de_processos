@@ -1,10 +1,11 @@
 <div class="form-model search">
 
-    <ul class="list-title">
+    <ul id="filter-title" class="filter-title rounded-border-bottom">
         <li>Busca de usuário</li>
+        <li onclick="exibeFiltro(this)">Exibir</li>
     </ul>
 
-    <form method="GET" action="" style="margin-bottom: 20px;">
+    <form id="form-filter" method="GET" action="" style="display: none; margin-bottom: 20px;">
 
         <div class="form-group">
             <label for="busca">Nome ou CPF</label>
@@ -186,4 +187,21 @@
         echo "</div>";
     }
     ?>
+
+<script>
+    function exibeFiltro(e) {
+        const titulo = document.getElementById('filter-title');
+        const form = document.getElementById('form-filter');
+
+        if(form.style.display === 'none') {
+            titulo.classList.remove('rounded-border-bottom');
+            form.style.display = 'block';
+            e.innerText = 'Ocultar';
+        }else{
+            titulo.classList.add('rounded-border-bottom');
+            form.style.display = 'none';
+            e.innerText = 'Exibir';
+        }
+    }
+</script>
 </div>
