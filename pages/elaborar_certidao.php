@@ -6,7 +6,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Criação de Despacho</title>
+  <title>Criação de Certidão</title>
 
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/forms.css">
@@ -54,7 +54,7 @@
         include('utils/process_data.php');
       ?>
 
-      <form id="despachoForm">
+      <form id="certidaoForm">
 
         <input type="texto" name="processo" value="<?php echo $_POST['id']; ?>">
         
@@ -194,12 +194,12 @@
   </div>
 
   <script>
-    document.getElementById("despachoForm").addEventListener("submit", function(e) {
+    document.getElementById("certidaoForm").addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const form = document.getElementById("despachoForm");
+      const form = document.getElementById("certidaoForm");
       const formData = new FormData(form);
-      fetch("../api/criar_despacho.php", {
+      fetch("../api/criar_certidao.php", {
         method: "POST",
         body: formData
       })
