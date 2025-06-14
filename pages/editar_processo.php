@@ -235,6 +235,44 @@
         });
       });
     }
+
+
+    //Verificar Duplicidade de Processos
+  const nProtocoloInput = document.getElementById("n_protocolo");
+  const dataProcessoInput = document.getElementById("data_processo");
+  const submitButton = document.querySelector("button[type='submit']");
+
+  function verificarDuplicidade() {
+    const n_protocolo = nProtocoloInput.value.trim();
+    const data_processo = dataProcessoInput.value;
+
+    // Só verifica se os dois campos estiverem preenchidos
+    if (n_protocolo && data_processo) {
+      fetch("../api/verifica_processo.php", {
+        method: "POST",
+        body: new URLSearchParams({ n_protocolo, data_processo })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.existe) {
+          alert("Já existe um processo com este número de protocolo e data.");
+          dataProcessoInput.value = "";
+          submitButton.disabled = true; // Impede envio
+        } else {
+          submitButton.disabled = false; // Permite envio
+        }
+      })
+      .catch(err => {
+        console.error("Erro na verificação:", err);
+        submitButton.disabled = false;
+      });
+    }
+  }
+
+  // Aciona quando sair do campo (ou pode usar 'input' se quiser mais instantâneo)
+  nProtocoloInput.addEventListener("blur", verificarDuplicidade);
+  dataProcessoInput.addEventListener("blur", verificarDuplicidade);
+  //Fim
   </script>
   <script src="../js/modal.js"></script>
 

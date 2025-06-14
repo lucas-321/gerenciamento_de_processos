@@ -298,24 +298,70 @@
                     </div>";
             }
 
+            // $sqlTotal = "SELECT COUNT(*) as total 
+            // FROM processos 
+            // WHERE ativo = 1 AND id <> 1";
+
+            // $sqlTotal = "SELECT COUNT(*) as total 
+            // FROM processos 
+            // $condicoes";
+
             $sqlTotal = "SELECT COUNT(*) as total 
-            FROM processos 
-            WHERE ativo = 1 AND id <> 1";
+             FROM processos
+             INNER JOIN assuntos ON processos.assunto = assuntos.id
+             LEFT JOIN (
+                 SELECT l1.*
+                 FROM localizacoes l1
+                 INNER JOIN (
+                     SELECT id_processo, MAX(localizado_em) AS max_localizado
+                     FROM localizacoes
+                     WHERE ativo = 1
+                     GROUP BY id_processo
+                 ) l2 ON l1.id_processo = l2.id_processo AND l1.localizado_em = l2.max_localizado
+             ) AS localizacoes ON localizacoes.id_processo = processos.id
+             LEFT JOIN agentes ON localizacoes.destino_tipo = 'usuario' AND localizacoes.destino_id = agentes.id
+             $condicoes";
+             
             $resultTotal = mysqli_query($conexao, $sqlTotal);
             $total = mysqli_fetch_assoc($resultTotal)['total'];
 
             $totalPaginas = ceil($total / $porPagina);
 
+
+            $queryString = $_GET;
+            unset($queryString['page']); // Evita conflito
+            $filtrosURL = http_build_query($queryString);
+
             // Botões de página
             if ($totalPaginas > 1) {
                 echo "<div class='pagination'>";
+
+                $maxLinks = 2;
+
+                if ($pagina > 1) {
+                    echo "<a href='?page=1&$filtrosURL'>1</a>";
+                    if ($pagina > $maxLinks + 2) {
+                        echo "<span>...</span>";
+                    }
+                }
+
+                $start = max(2, $pagina - $maxLinks);
+                $end = min($totalPaginas - 1, $pagina + $maxLinks);
                 
-                for ($i = 1; $i <= $totalPaginas; $i++) {
+                for ($i = $start; $i <= $end; $i++) {
                     if ($i == $pagina) {
                         echo "<strong style='margin: 0 5px;'>$i</strong>"; // página atual destacada
                     } else {
-                        echo "<a href='lista_processos.php?page=$i' style='margin: 0 5px;'>$i</a>"; // link para outras páginas
+                        echo "<a href='lista_processos.php?page=$i&$filtrosURL' style='margin: 0 5px;'>$i</a>"; // link para outras páginas
                     }
+                }
+
+                if ($pagina < $totalPaginas - $maxLinks - 1) {
+                    echo "<span>...</span>";
+                }
+
+                if ($pagina < $totalPaginas) {
+                    echo "<a href='?page=$totalPaginas&$filtrosURL'>$totalPaginas</a>";
                 }
 
                 echo "</div>";
