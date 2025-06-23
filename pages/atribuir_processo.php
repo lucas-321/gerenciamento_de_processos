@@ -111,10 +111,10 @@
                 <span><b>Pendência</b></span>
                 <span><?php echo "$pendencia"; ?></span>
             </div>
-
         <?php
             }
 
+            include('utils/history_list.php');
             if($status != 'Finalizado'){
         ?>
 

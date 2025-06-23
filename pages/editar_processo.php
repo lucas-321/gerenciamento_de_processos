@@ -70,6 +70,7 @@
           <form id="cadastroForm">
 
             <input type="hidden" name="id" value="<?php echo $_POST['id']; ?>">
+            <input type="hidden" name="nome_assunto" value="<?php echo $nome_assunto; ?>">
 
             <div class="form-group">
               <label>Nº Protocolo</label>

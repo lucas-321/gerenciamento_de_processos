@@ -43,6 +43,7 @@
             SELECT MAX(l2.id)
             FROM localizacoes l2
             WHERE l2.ativo = 1
+            AND atual = 1
             GROUP BY l2.id_processo
             HAVING MAX(l2.destino_tipo = 'usuario' AND l2.destino_id = ?) = 1
         )

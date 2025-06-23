@@ -1,44 +1,35 @@
 <?php
+ob_start(); // <- inicia buffer de saída
 session_start();
 include("conexao.php");
+include("funcoes.php");
 
 $id = $_POST["id"];
 $status = $_POST["status"];
 $pendencia = $_POST["pendencia"];
 $agente_id = $_SESSION["agente_id"];
 
-// Foto (opcional)
-// $foto_nome = null;
-// if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-//     $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-//     $foto_nome = uniqid('foto_') . '.' . $ext;
-//     $destino = __DIR__ . '/../fotos_processo/' . $foto_nome;
-
-//     if (!move_uploaded_file($_FILES['foto']['tmp_name'], $destino)) {
-//         echo json_encode(["mensagem" => "Falha ao salvar a imagem."]);
-//         exit;
-//     }
-// }
-
 $conexao->begin_transaction();
 
 try {
+    // 1. Buscar dados antigos
+    $stmtOld = $conexao->prepare("SELECT status, pendencia, n_protocolo, data_processo
+    FROM processos
+    WHERE id = ?");
+    $stmtOld->bind_param("i", $id);
+    $stmtOld->execute();
+    $resultado = $stmtOld->get_result();
+    $antigo = $resultado->fetch_assoc();
+
+    if (!$antigo) {
+        throw new Exception("Processo não encontrado.");
+    }
+    // Fim da Busca aos antigos
+
     // Monta a query de UPDATE do processo dinamicamente
     $queryProcesso = "UPDATE processos SET status = ?, pendencia = ? WHERE id = ?";
     $paramsProcesso = [$status, $pendencia, $id];
     $typesProcesso = "ssi";
-
-    // if ($pendencia) {
-    //     $queryProcesso .= ", pendencia = ?";
-    //     $paramsUser[] = $pendencia;
-    //     $typesUser .= "s";
-    // }
-
-    // if ($foto_nome) {
-    //     $queryProcesso .= ", logo = ?";
-    //     $params[] = $foto_nome;
-    //     $types .= "s";
-    // }
 
     $stmtProcesso = $conexao->prepare($queryProcesso);
     $stmtProcesso->bind_param($typesProcesso, ...$paramsProcesso);
@@ -57,25 +48,41 @@ try {
     $stmtLocalizacao->bind_param($typesLocalizacao, ...$paramsLocalizacao);
     $stmtLocalizacao->execute();
 
-    // --- Log da alteração ---
-    $acao = "Atualização de status e pendência do processo";
-    $detalhes = "Status: $status; Pendência: $pendencia";
+    // Log de alterações
+    $alteracoes = [];
+    if ($antigo["pendencia"] !== $pendencia) {
+        $alteracoes[] = "pendência de \"{$antigo['pendencia']}\" para \"$pendencia\"";
+    }
     
-    $queryLog = "INSERT INTO logs_processo (id_processo, agente_id, acao, detalhes) 
-                    VALUES (?, ?, ?, ?)";
-    $paramsLog = [$id, $agente_id, $acao, $detalhes];
-    $typesLog = "iiss";
+    if ($antigo["status"] !== $status) {
+        $alteracoes[] = "status de \"{$antigo['status']}\" para \"$status\"";
+    }
 
-    $stmtLog = $conexao->prepare($queryLog);
-    $stmtLog->bind_param($typesLog, ...$paramsLog);
-    $stmtLog->execute();
+    if (!empty($alteracoes)) {
+        $alteracoesTexto = implode("; ", $alteracoes);
+        $data_atual = date("d/m/Y H:i:s");
+        $nome_usuario = $_SESSION["nome"];
+        $id_usuario = $_SESSION["usuario_id"];
+        $tipo = "analisar";
+        $objeto = "processo";
+        $n_protocolo = $antigo["n_protocolo"];
+        $data_processo = $antigo["data_processo"];
+        $ano = date("Y", strtotime($data_processo));
+        $detalhes = "$nome_usuario alterou o $objeto $n_protocolo/$ano: $alteracoesTexto em $data_atual.";
+
+        registrarAtividade($conexao, $id_usuario, $nome_usuario, $tipo, $objeto, $detalhes);
+    }
+    // Fim do log
 
     // Commita tudo
     $conexao->commit();
+    // Limpa qualquer saída antes do JSON
+    ob_clean();
     echo json_encode(["mensagem" => "Análise Registrada."]);
 
 } catch (Exception $e) {
     $conexao->rollback();
+    ob_clean(); // Garante que não vaze HTML do Exception
     echo json_encode(["mensagem" => "Erro ao atualizar processo: " . $e->getMessage()]);
 }
 ?>

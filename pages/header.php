@@ -98,9 +98,25 @@
                             </ul>
                         </li> -->
 
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href='relatorios.php'>Relatório</a>
+                        </li> -->
+
+                        <!-- Registros -->
+                        <li class="nav-item nav-list" onclick="toggleSubmenu(this)">
+                            <span><a href='#'>Registros</a></span>
+                            <ul>
+
+                                <li class="subitem">
+                                    <a href='relatorios.php'>Processos</a>
+                                </li>
+                                <li class="subitem">
+                                    <a href='registros.php'>Atividades</a>
+                                </li>
+
+                            </ul>
                         </li>
+                        <!-- Fim -->
                 <?php
                     }else if ($_SESSION["categoria"] == 3) {
                 ?>

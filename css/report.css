@@ -19,6 +19,21 @@
     padding: 10px;
 }
 
+.register-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    padding: .5rem;
+    font-size: 10pt;
+    border-bottom: 2px solid #c0c4c9;
+}
+
+.register-list span {
+    width: 90%;
+}
+
 .list-items {
     list-style: none;
     padding-left: 0;
@@ -42,6 +57,10 @@
     display: flex;
     width: 20rem;
     border: 1px solid black;
+}
+
+.register-box {
+    width: 60%;
 }
 
 @media print {

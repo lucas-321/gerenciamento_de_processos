@@ -153,3 +153,12 @@ ul li {
     display: flex;
     justify-content: space-between;
 }
+
+.history {
+    margin: 1.5rem 0;
+}
+
+.history-title {
+    text-align: center;
+    border-bottom: 2px solid #c0c4c9;
+}

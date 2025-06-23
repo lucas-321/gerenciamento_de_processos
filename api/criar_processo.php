@@ -1,6 +1,8 @@
 <?php
+ob_start(); // <- inicia buffer de saída
 session_start();
 include("conexao.php");
+include("funcoes.php");
 
 if ($_SESSION["categoria"] != 1 && $_SESSION["categoria"] != 2 && $_SESSION["categoria"] != 3) {
     echo json_encode(["mensagem" => "Acesso negado. Apenas administradores podem cadastrar processos."]);
@@ -31,10 +33,25 @@ try {
     $stmt->bind_param("ssissssssi", $n_protocolo, $data_processo, $assunto, $inscricao, $nome_interessado, $cpf, $email, $telefone, $observacoes, $criado_por);
     $stmt->execute();
 
+    // --- Log da alteração ---
+    $nome_usuario = $_SESSION["nome"];
+    $id_usuario = $_SESSION["usuario_id"];
+    $tipo = "criar";
+    $objeto = "processo";
+    $ano = date("Y", strtotime($data_processo));
+    $data_atual = date("d/m/Y H:i:s");
+    $detalhes = "$nome_usuario criou o $objeto $n_protocolo/$ano em $data_atual.";
+
+    registrarAtividade($conexao, $id_usuario, $nome_usuario, $tipo, $objeto, $detalhes);
+    // --- Fim do log ---
+
     $conexao->commit();
+    // Limpa qualquer saída antes do JSON
+    ob_clean();
     echo json_encode(["mensagem" => "Processo criado com sucesso."]);
 
 } catch (Exception $e) {
     $conexao->rollback();
+    ob_clean(); // Garante que não vaze HTML do Exception
     echo json_encode(["mensagem" => "Erro ao criar processo: " . $e->getMessage()]);
 }

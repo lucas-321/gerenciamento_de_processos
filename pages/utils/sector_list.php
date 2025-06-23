@@ -67,6 +67,7 @@
                     </li>
                     <li>
                         <form id='deleteForm{$dados['id']}'>
+                            <input type='hidden' name='sigla' value='{$dados['sigla']}'>
                             <input type='hidden' name='id' value='{$dados['id']}'>
                             <button class='list-btn red-btn' type='submit' onclick='deletar(this)'>Excluir</button>
                         </form>

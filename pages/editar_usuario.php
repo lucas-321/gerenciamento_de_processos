@@ -17,6 +17,7 @@
 
   <?php include('header.php'); 
         include('../api/conexao.php');
+        include("../api/funcoes.php"); // para nomeCategoria() e registrarAtividade()
 
         if (!isset($_SESSION['usuario_id'])) {
           header("Location: ../index.php");
@@ -47,23 +48,25 @@
               $login = $dados['login'];
               $id_usuario = $dados['u_id'];
 
-              switch ($categoria) {
-                  case 1:
-                      $n_categoria = "Administrador";
-                      break;
-                  case 2:
-                      $n_categoria = "Coordenador";
-                      break;
-                  case 3:
-                      $n_categoria = "Protocolo";
-                      break;
-                  case 4:
-                      $n_categoria = "Analista";
-                      break;
-                  case 5:
-                      $n_categoria = "Externo";
-                      break;
-              }
+              $n_categoria = nomeCategoria($categoria);
+
+              // switch ($categoria) {
+              //     case 1:
+              //         $n_categoria = "Administrador";
+              //         break;
+              //     case 2:
+              //         $n_categoria = "Coordenador";
+              //         break;
+              //     case 3:
+              //         $n_categoria = "Protocolo";
+              //         break;
+              //     case 4:
+              //         $n_categoria = "Analista";
+              //         break;
+              //     case 5:
+              //         $n_categoria = "Externo";
+              //         break;
+              // }
             }
 
         }
@@ -122,10 +125,10 @@
               <label for="categoria">Categoria</label>
               <select id="categoria" name="categoria" onchange="verificaCategoria()">
                 <option value="<?php echo "$categoria";?>"><?php echo "$n_categoria";?></option>
-                <option value="1">Administrador</option>
-                <option value="2">Presidente</option>
-                <option value="3">Vereador</option>
-                <option value="4">Usuário Comum</option>
+                <option value="2">Coordenador</option>
+                <option value="3">Protocolo</option>
+                <option value="4">Analista</option>
+                <option value="5">Externo</option>
               </select>
             </div>
 

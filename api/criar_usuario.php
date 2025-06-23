@@ -1,6 +1,8 @@
 <?php
+ob_start(); // <- inicia buffer de saída
 session_start();
 include("conexao.php");
+include("funcoes.php");
 
 if ($_SESSION["categoria"] != 1 && $_SESSION["categoria"] != 2) {
     echo json_encode(["mensagem" => "Acesso negado. Apenas administradores podem cadastrar usuários."]);
@@ -59,10 +61,24 @@ try {
     $stmt2->bind_param("ssiii", $login, $senha, $categoria, $agente_id, $criado_por);
     $stmt2->execute();
 
+    // --- Log da alteração ---
+    $nome_usuario = $_SESSION["nome"];
+    $id_usuario = $_SESSION["usuario_id"];
+    $tipo = "criar";
+    $objeto = "usuario";
+    $data_atual = date("d/m/Y H:i:s");
+    $detalhes = "$nome_usuario criou o $objeto $nome em $data_atual.";
+
+    registrarAtividade($conexao, $id_usuario, $nome_usuario, $tipo, $objeto, $detalhes);
+    // --- Fim do log ---
+
     $conexao->commit();
+    // Limpa qualquer saída antes do JSON
+    ob_clean();
     echo json_encode(["mensagem" => "Usuário criado com sucesso."]);
 
 } catch (Exception $e) {
     $conexao->rollback();
+    ob_clean(); // Garante que não vaze HTML do Exception
     echo json_encode(["mensagem" => "Erro ao criar usuário/agente: " . $e->getMessage()]);
 }
