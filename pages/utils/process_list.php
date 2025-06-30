@@ -1,4 +1,6 @@
-<div class="filter-model search">
+<?php include('utils/process_filter.php'); ?>
+
+<!-- <div class="filter-model search">
 
     <ul id="filter-title" class="filter-title rounded-border-bottom">
         <li>Filtro de Busca</li>
@@ -10,7 +12,7 @@
         <div class="filter-row">
             <div class="filter-group">
                 <label for="n_protocolo">Nº de Protocolo</label>
-                <input type="number" name="n_protocolo" placeholder="Nº de Protocolo" value="<?= isset($_GET['n_protocolo']) ? htmlspecialchars($_GET['n_protocolo']) : '' ?>">
+                <input type="text" name="n_protocolo" placeholder="Nº de Protocolo" value="<?= isset($_GET['n_protocolo']) ? htmlspecialchars($_GET['n_protocolo']) : '' ?>">
             </div>
 
             <div class="filter-group">
@@ -97,7 +99,7 @@
 
     </form>
 
-</div>
+</div> -->
 
 <div class="list-model">
     <ul class="list-title">
@@ -126,6 +128,7 @@
         $cpf_cnpj = isset($_GET['cpf_cnpj']) ? trim($_GET['cpf_cnpj']) : '';
         $assunto = isset($_GET['assunto']) ? trim($_GET['assunto']) : '';
         $usuario_localizado = isset($_GET['usuario_localizado']) ? trim($_GET['usuario_localizado']) : '';
+        $pasta_localizada = isset($_GET['pasta_localizada']) ? trim($_GET['pasta_localizada']) : '';
 
         $condicoes = "WHERE processos.ativo = 1";
 
@@ -160,11 +163,13 @@
         if (!empty($usuario_localizado)) {
             $buscaSegura = mysqli_real_escape_string($conexao, $usuario_localizado);
             $condicoes .= " AND (agentes.nome LIKE '%$buscaSegura%')";
+            echo "<script></script>";
         }
 
         if (!empty($pasta_localizada)) {
             $buscaSegura = mysqli_real_escape_string($conexao, $pasta_localizada);
-            $condicoes .= " AND (pastas.nome LIKE '%$buscaSegura%')";
+            $condicoes .= " AND (pastas.nome LIKE '%$buscaSegura%') AND (destino_tipo = 'pasta')";
+            echo "<script></script>";
         }
 
         if (!empty($setor_localizado)) {
@@ -177,7 +182,8 @@
                assuntos.nome AS n_assunto, 
                localizacoes.destino_id, 
                localizacoes.destino_tipo,
-               agentes.nome AS nome_usuario_destino
+               agentes.nome AS nome_usuario_destino,
+               pastas.nome
         FROM processos
         INNER JOIN assuntos ON processos.assunto = assuntos.id
         LEFT JOIN (
@@ -191,9 +197,13 @@
             ) l2 ON l1.id_processo = l2.id_processo AND l1.localizado_em = l2.max_localizado
         ) AS localizacoes ON localizacoes.id_processo = processos.id
         LEFT JOIN agentes ON localizacoes.destino_tipo = 'usuario' AND localizacoes.destino_id = agentes.id
+        LEFT JOIN pastas ON localizacoes.destino_tipo = 'pasta' AND localizacoes.destino_id = pastas.id
+        LEFT JOIN setores ON localizacoes.destino_tipo = 'setor' AND localizacoes.destino_id = setores.id
         $condicoes
         ORDER BY processos.created_at DESC
         LIMIT $porPagina OFFSET $offset";
+
+        // echo $sql;
 
     $result = mysqli_query($conexao, $sql);
 
@@ -321,7 +331,11 @@
                  ) l2 ON l1.id_processo = l2.id_processo AND l1.localizado_em = l2.max_localizado
              ) AS localizacoes ON localizacoes.id_processo = processos.id
              LEFT JOIN agentes ON localizacoes.destino_tipo = 'usuario' AND localizacoes.destino_id = agentes.id
+             LEFT JOIN pastas ON localizacoes.destino_tipo = 'pasta' AND localizacoes.destino_id = pastas.id
+             LEFT JOIN setores ON localizacoes.destino_tipo = 'setor' AND localizacoes.destino_id = setores.id
              $condicoes";
+
+            //  echo "$sqlTotal";
              
             $resultTotal = mysqli_query($conexao, $sqlTotal);
             $total = mysqli_fetch_assoc($resultTotal)['total'];

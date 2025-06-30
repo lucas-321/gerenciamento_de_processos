@@ -10,7 +10,7 @@
         <div class="filter-row">
             <div class="filter-group">
                 <label for="n_protocolo">Nº de Protocolo</label>
-                <input type="number" name="n_protocolo" placeholder="Nº de Protocolo" value="<?= isset($_GET['n_protocolo']) ? htmlspecialchars($_GET['n_protocolo']) : '' ?>">
+                <input type="text" name="n_protocolo" placeholder="Nº de Protocolo" value="<?= isset($_GET['n_protocolo']) ? htmlspecialchars($_GET['n_protocolo']) : '' ?>">
             </div>
 
             <div class="filter-group">
