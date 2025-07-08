@@ -229,6 +229,24 @@
                     </select>
                 </div>
 
+                <!-- Status, discordo disso aqui, mas pediram assim -->
+                <div id="select-status" class="form-group" style="width: 100%;">
+                    <label for="status"><b>Status:</b></label>
+                    <select id="status" name="status">
+                        <!-- <option value="">Selecione Status</option> -->
+                        <option value="<?php echo "$status"; ?>"><?php echo "$status"; ?></option>
+                        <option value="Sob Análise">Sob Análise</option>
+                        <option value="Despacho Elaborado">Despacho Elaborado</option>
+                        <option value="Certidão Elaborada">Certidão Elaborada</option>
+                        <option value="Pendência">Pendência</option>
+                        <option value="Aguardando Contribuinte">Aguardando Contribuinte</option>
+                        <option value="Encaminhado">Encaminhado</option>
+                        <option value="Finalizado sem Arquivar">Finalizado sem Arquivar</option>
+                        <option value="Finalizado">Finalizado e Arquivado</option>
+                    </select>
+                </div>
+                <!-- Fim de status -->
+
                 <input type="hidden" name="id" value="<?php echo $_POST['id']; ?>">
 
                 <input type="hidden" name="destino" id="destino" value="">

@@ -13,6 +13,8 @@ if (!isset($_POST['id'], $_POST['destino'])) {
 $id_processo = $_POST['id'];
 $destino = $_POST['destino']; // "usuario", "setor" ou "pasta"
 
+$status = isset($_POST['status']);
+
 // Pegar o ID selecionado
 $destino_id = null;
 if ($destino == 'usuario' && isset($_POST['usuario'])) {
@@ -70,6 +72,19 @@ if ($destino == 'usuario' && isset($_POST['usuario'])) {
     echo json_encode(["mensagem" => "Destino ou ID inválido."]);
     exit;
 }
+
+//Alterar status
+    $queryStatus = "UPDATE processos 
+    SET status = $status";
+
+    $queryStatus .= " WHERE id_processo = ?";
+    $params[] = $id_processo;
+    $types .= "i";
+
+    $stmt = $conexao->prepare($queryStatus);
+    $stmt->bind_param($types, ...$params);
+    $stmt->execute();
+// Fim 
 
 //Alterar as demais localizações do processo
     $queryAssunto = "UPDATE localizacoes 

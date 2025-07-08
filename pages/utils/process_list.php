@@ -253,15 +253,29 @@
                                 </div>
                             </form>";
             }else{
-                $form = "<button class='list-btn gray-btn' type='submit'>Já Atribuído</button>";
+                // Provisório enquanto o sistema é só utilizado pelo Protocolo
+                // $form = "<button class='list-btn gray-btn' type='submit'>Já Atribuído</button>";
+                //O sistema geral, deve comentar abaixo e descomentar em cima
+                $form = "<form id='cadastroForm' method='POST' action='atribuir_processo.php'>
+                                <input type='hidden' name='id' value='$dados[id]'>
+                                <div class='form-group button'>
+                                    <button class='list-btn gray-btn' type='submit'>Já Atribuído</button>
+                                </div>
+                            </form>";
             }
             
+            $status = mb_strtolower($dados['status'], 'UTF-8');
 
             echo "<ul class='list-items'>
                     <li>{$dados['n_protocolo']}/".date('Y', strtotime($dados['data_processo']))."</li>
                     <li>{$dados['n_assunto']}</li>
                     <li>{$dados['nome_interessado']}</li>
-                    <li>{$destino_nome}</li>";
+                    <li>
+                        {$destino_nome}<br>
+                        <span style='text-transform: capitalize;'>
+                            {$status}
+                        </span>
+                    </li>";
 
             if($dados['status'] != 'Finalizado'){
                 echo "<li>$form</li>
