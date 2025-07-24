@@ -27,6 +27,8 @@
 
         <?php
 
+            $referencia = 'geral';
+
             if($_SESSION['categoria'] == 1 || $_SESSION['categoria'] == 2) {
                 include('utils/users_list.php');
             }else if($_SESSION['categoria'] == 3){
