@@ -13,7 +13,8 @@ if (!isset($_POST['id'], $_POST['destino'])) {
 $id_processo = $_POST['id'];
 $destino = $_POST['destino']; // "usuario", "setor" ou "pasta"
 
-$status = isset($_POST['status']);
+// $status = isset($_POST['status']);
+$status = trim($_POST['status'] ?? '');
 
 // Pegar o ID selecionado
 $destino_id = null;
@@ -74,12 +75,18 @@ if ($destino == 'usuario' && isset($_POST['usuario'])) {
 }
 
 //Alterar status
-    $queryStatus = "UPDATE processos 
-    SET status = $status";
+    // $queryStatus = "UPDATE processos 
+    // SET status = $status";
 
-    $queryStatus .= " WHERE id_processo = ?";
-    $params[] = $id_processo;
-    $types .= "i";
+    // $queryStatus .= " WHERE id = ?";
+    // $params[] = $id_processo;
+    // $types .= "i";
+
+    $queryStatus = "UPDATE processos 
+    SET status = ? 
+    WHERE id = ?";
+    $params = [$status, $id_processo];
+    $types = "si";
 
     $stmt = $conexao->prepare($queryStatus);
     $stmt->bind_param($types, ...$params);
@@ -87,12 +94,16 @@ if ($destino == 'usuario' && isset($_POST['usuario'])) {
 // Fim 
 
 //Alterar as demais localizações do processo
-    $queryAssunto = "UPDATE localizacoes 
-    SET atual = 0";
+    // $queryAssunto = "UPDATE localizacoes 
+    // SET atual = 0";
 
-    $queryAssunto .= " WHERE id_processo = ?";
-    $params[] = $id_processo;
-    $types .= "i";
+    // $queryAssunto .= " WHERE id_processo = ?";
+    // $params[] = $id_processo;
+    // $types .= "i";
+
+    $queryAssunto = "UPDATE localizacoes SET atual = 0 WHERE id_processo = ?";
+    $params = [$id_processo]; // redefine os parâmetros
+    $types = "i";             // redefine os tipos
 
     $stmt = $conexao->prepare($queryAssunto);
     $stmt->bind_param($types, ...$params);

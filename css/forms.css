@@ -115,22 +115,6 @@ textarea {
     align-items: center;
 }
 
-#opcoes_vereador {
-    display: none;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: .625rem;
-    padding: .625rem;
-}
-
-#local-sessao {
-    display: none;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: .625rem;
-    padding: .625rem;
-}
-
 .sessao select option{
     text-transform: uppercase;
     display: flex;

@@ -6,7 +6,12 @@ include("funcoes.php");
 
 header('Content-Type: application/json');
 
-if ($_SESSION["categoria"] != 1 && $_SESSION["categoria"] != 2) {
+// if ($_SESSION["categoria"] != 1 && $_SESSION["categoria"] != 2) {
+//     echo json_encode(["mensagem" => "Acesso negado. Apenas administradores podem cadastrar assuntos."]);
+//     exit;
+// }
+
+if ($_SESSION["categoria"] > 3) {
     echo json_encode(["mensagem" => "Acesso negado. Apenas administradores podem cadastrar assuntos."]);
     exit;
 }

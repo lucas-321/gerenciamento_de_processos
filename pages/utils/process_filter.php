@@ -1,11 +1,14 @@
 <div class="filter-model search">
 
-    <ul id="filter-title" class="filter-title rounded-border-bottom">
+    <!-- <ul id="filter-title" class="filter-title rounded-border-bottom"> -->
+    <ul id="filter-title" class="filter-title">
         <li>Filtro de Busca</li>
-        <li onclick="exibeFiltro(this)">Exibir</li>
+        <!-- <li onclick="exibeFiltro(this)">Exibir</li> -->
+         <li onclick="exibeFiltro(this)">Ocultar</li>
     </ul>
 
-    <form id="form-filter" method="GET" action="" style="display: none; margin-bottom: 20px;">
+    <!-- <form id="form-filter" method="GET" action="" style="display: none; margin-bottom: 20px;"> -->
+    <form id="form-filter" method="GET" action="" style="display: block; margin-bottom: 20px;">
 
         <div class="filter-row">
             <div class="filter-group">
@@ -59,6 +62,12 @@
             </div>
         </div>
 
+        <?php
+            if($referencia == 'painel'){
+
+            }else{        
+        ?>
+
         <div class="destiny-selection">
             <span><b>Destino</b></span>
             <div class="radios">
@@ -90,6 +99,10 @@
             <label for="setor_localizado">Setor Encaminhado</label>
             <input type="text" name="setor_localizado" placeholder="Buscar por setor" value="<?= isset($_GET['setor_localizado']) ? htmlspecialchars($_GET['setor_localizado']) : '' ?>">
         </div>
+
+        <?php
+            }
+        ?>
 
         <div class="form-group button">
             <button type="submit" class="form-btn blue-btn">Buscar</button>

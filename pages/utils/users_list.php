@@ -1,11 +1,13 @@
 <div class="form-model search">
 
-    <ul id="filter-title" class="filter-title rounded-border-bottom">
+    <!-- <ul id="filter-title" class="filter-title rounded-border-bottom"> -->
+    <ul id="filter-title" class="filter-title">
         <li>Busca de usuário</li>
-        <li onclick="exibeFiltro(this)">Exibir</li>
+        <li onclick="exibeFiltro(this)">Ocultar</li>
     </ul>
 
-    <form id="form-filter" method="GET" action="" style="display: none; margin-bottom: 20px;">
+    <form id="form-filter" method="GET" action="" style="display: block; margin-bottom: 20px;">
+    <!-- <form id="form-filter" method="GET" action="" style="display: none; margin-bottom: 20px;"> -->
 
         <div class="form-group">
             <label for="busca">Nome ou CPF</label>

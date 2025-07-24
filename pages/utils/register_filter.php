@@ -1,11 +1,14 @@
 <div class="filter-model search">
 
-    <ul id="filter-title" class="filter-title rounded-border-bottom">
+    <!-- <ul id="filter-title" class="filter-title rounded-border-bottom"> -->
+    <ul id="filter-title" class="filter-title">
         <li>Filtro de Busca</li>
-        <li onclick="exibeFiltro(this)">Exibir</li>
+        <!-- <li onclick="exibeFiltro(this)">Exibir</li> -->
+         <li onclick="exibeFiltro(this)">Ocultar</li>
     </ul>
 
-    <form id="form-filter" method="GET" action="" style="display: none; margin-bottom: 20px;">
+    <form id="form-filter" method="GET" action="" style="display: block; margin-bottom: 20px;">
+    <!-- <form id="form-filter" method="GET" action="" style="display: none; margin-bottom: 20px;"> -->
 
         <div class="filter-row">
             <div class="filter-group">

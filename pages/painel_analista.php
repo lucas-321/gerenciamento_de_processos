@@ -19,6 +19,8 @@
             header("Location: ./index.php");
             exit;
         }
+
+        $referencia = 'painel';
     ?>
 
         <div class="content list-box">

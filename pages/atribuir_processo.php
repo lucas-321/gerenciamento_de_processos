@@ -106,6 +106,11 @@
             <span><?php echo "$observacoes"; ?></span>
         </div>
 
+        <div class="process-info">
+            <span><b>Status</b></span>
+            <span><?php echo "$status"; ?></span>
+        </div>
+
         <?php if($pendencia){ ?>
             <div class="process-info">
                 <span><b>Pendência</b></span>
@@ -136,10 +141,10 @@
                         <input type="radio" name="destino" value="pasta" onclick="mostrarSelect('pasta')">
                         Pasta
                     </label>
-                    <label>
+                    <!-- <label>
                         <input type="radio" name="destino" value="finalizar" onclick="mostrarFinalizar()">
                         Finalizar
-                    </label>
+                    </label> -->
                 <?php
                     }
                 ?>
@@ -154,14 +159,24 @@
                 <div id="select-usuario" class="destiny-options" style="display:none;">
                     <label for="usuario"><b>Escolha o usuário:</b></label>
                     <select id="usuario" name="usuario">
-                        <option value="">Selecione um usuário</option>
                         <!-- Opções de usuários aqui -->
                         <?php
+
+                            if($local_atual != '' && $tipo_atual == 'usuario'){
+                                echo "<option value='$id_atual'>$local_atual</option>";
+                            }else{
+                                echo "<option value=''>Selecione um usuário</option>";
+                            }
 
                             if($_SESSION['categoria'] == 3){
                                 $condicao = 'WHERE categoria = 2 OR categoria = 4';
                             }else{
                                 $condicao = 'WHERE categoria = 3';
+                            }
+                            
+                            // Remover Quando estiver funcionando para todos
+                            if($_SESSION['categoria'] != 3) {
+                                $condicao = 'WHERE categoria > 0';
                             }
 
                             $sql = "SELECT agentes.id AS agente_id, nome
@@ -186,9 +201,16 @@
                 <div id="select-setor" class="destiny-options" style="display:none;">
                     <label for="setor"><b>Escolha o setor:</b></label>
                     <select id="setor" name="setor">
-                        <option value="">Selecione um setor</option>
+                        <!-- <option value="">Selecione um setor</option> -->
                         <!-- Opções de setores aqui -->
                         <?php
+
+                            if($local_atual != '' && $tipo_atual == 'setor'){
+                                echo "<option value='$id_atual'>$local_atual</option>";
+                            }else{
+                                echo "<option value=''>Selecione um setor</option>";
+                            }
+
                             $sql = "SELECT id, nome
                             FROM setores
                             WHERE ativo = 1
@@ -209,9 +231,16 @@
                 <div id="select-pasta" class="destiny-options" style="display:none;">
                     <label for="pasta"><b>Escolha a pasta:</b></label>
                     <select id="pasta" name="pasta">
-                        <option value="">Selecione uma pasta</option>
+                        <!-- <option value="">Selecione uma pasta</option> -->
                         <!-- Opções de pastas aqui -->
                         <?php
+
+                            if($local_atual != '' && $tipo_atual == 'pasta'){
+                                echo "<option value='$id_atual'>$local_atual</option>";
+                            }else{
+                                echo "<option value=''>Selecione uma pasta</option>";
+                            }
+
                             $sql = "SELECT id, nome
                             FROM pastas
                             WHERE ativo = 1
@@ -233,8 +262,15 @@
                 <div id="select-status" class="form-group" style="width: 100%;">
                     <label for="status"><b>Status:</b></label>
                     <select id="status" name="status">
+                        <?php 
+                            if($status != ''){
+                                echo "<option value=$status>$status</option>";
+                            }else{
+                                echo "<option value=''>Selecione Status</option>";
+                            }
+                        ?>
                         <!-- <option value="">Selecione Status</option> -->
-                        <option value="<?php echo "$status"; ?>"><?php echo "$status"; ?></option>
+                        <!-- <option value="<?php echo "$status"; ?>"><?php echo "$status"; ?></option> -->
                         <option value="Sob Análise">Sob Análise</option>
                         <option value="Despacho Elaborado">Despacho Elaborado</option>
                         <option value="Certidão Elaborada">Certidão Elaborada</option>
@@ -242,7 +278,9 @@
                         <option value="Aguardando Contribuinte">Aguardando Contribuinte</option>
                         <option value="Encaminhado">Encaminhado</option>
                         <option value="Finalizado sem Arquivar">Finalizado sem Arquivar</option>
-                        <option value="Finalizado">Finalizado e Arquivado</option>
+                        <option value="Finalizado  e Arquivado">Finalizado e Arquivado</option>
+                        <option value="Finalizado e Arquivado sem Digitalização">Finalizado e Arquivado sem Digitalização</option>
+                        <option value="Finalizado, Digitalizado e Arquivado">Finalizado, Digitalizado e Arquivado</option>
                     </select>
                 </div>
                 <!-- Fim de status -->
@@ -276,7 +314,7 @@
   </div>
 
   <script>
-    document.getElementById("cadastroForm").addEventListener("submit", function(e) {
+    /*document.getElementById("cadastroForm").addEventListener("submit", function(e) {
         e.preventDefault();
 
         const form = document.getElementById("cadastroForm");
@@ -288,29 +326,30 @@
         .then(res => res.json())
         .then(data => alert(data.mensagem))
         .then(window.location.href ="painel.php");
-    });
+    });*/
     
-    // document.getElementById("cadastroForm").addEventListener("submit", function(e) {
-    //     e.preventDefault();
+    //Deixar aqui pra ver o erro, depois comentar e utilizar o código acima
+    document.getElementById("cadastroForm").addEventListener("submit", function(e) {
+        e.preventDefault();
 
-    //     const form = document.getElementById("cadastroForm");
-    //     const formData = new FormData(form);
-    //     fetch("../api/atribuir_processo.php", {
-    //     method: "POST",
-    //     body: formData
-    //     })
-    //     .then(res => res.text()) // <- muda para .text() para inspecionar
-    //     .then(text => {
-    //     console.log("Resposta bruta:", text); // veja o erro real no console
-    //     try {
-    //         const data = JSON.parse(text);
-    //         alert(data.mensagem);
-    //         window.location.href = "painel.php";
-    //     } catch (e) {
-    //         console.error("Erro ao interpretar JSON:", e);
-    //     }
-    //     });
-    // });
+        const form = document.getElementById("cadastroForm");
+        const formData = new FormData(form);
+        fetch("../api/atribuir_processo.php", {
+        method: "POST",
+        body: formData
+        })
+        .then(res => res.text()) // <- muda para .text() para inspecionar
+        .then(text => {
+        console.log("Resposta bruta:", text); // veja o erro real no console
+        try {
+            const data = JSON.parse(text);
+            alert(data.mensagem);
+            window.location.href = "painel.php";
+        } catch (e) {
+            console.error("Erro ao interpretar JSON:", e);
+        }
+        });
+    });
 
     document.getElementById("finalizarForm").addEventListener("submit", function(e) {
       e.preventDefault();

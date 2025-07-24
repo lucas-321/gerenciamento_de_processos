@@ -31,6 +31,13 @@
     <?php
         if ($result->num_rows > 0) {
             while ($dados = $result->fetch_assoc()) {
+
+                if($dados['atual'] == 1){
+                    $local_atual = $dados['nome_destino'];
+                    $id_atual = $dados['destino_id'];
+                    $tipo_atual = $dados['destino_tipo'];
+                }
+
                 $local = $dados['nome_destino'] ?? '---';
                 $atribuido = $dados['localizado_em'] ? date('d/m/Y', strtotime($dados['localizado_em'])) : '-';
                 $recebido = $dados['recebido_em'] ? date('d/m/Y', strtotime($dados['recebido_em'])) : '-';

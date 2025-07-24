@@ -19,6 +19,8 @@
             exit;
         }
         include('../api/conexao.php');
+
+        $referencia = 'geral';
   ?>
 
   <div class="content list-box">
