@@ -72,14 +72,44 @@
             <span><b>Destino</b></span>
             <div class="radios">
                 <label>
-                    <input type="radio" name="destino" value="usuario" onclick="mostrarSelect('usuario')"> Usuário
+                    <input 
+                    type="radio" 
+                    name="destino" 
+                    value="usuario" 
+                    onclick="mostrarSelect('usuario'), removerValores('usuario_localizado')"
+                    <?php
+                        if(isset($_GET['usuario_localizado']) && $_GET['usuario_localizado'] != ''){
+                            echo "checked";
+                        }
+                    ?>
+                    > Usuário
                 </label>
                 <label>
-                    <input type="radio" name="destino" value="setor" onclick="mostrarSelect('setor')">
+                    <input 
+                    type="radio" 
+                    name="destino" 
+                    value="setor" 
+                    onclick="mostrarSelect('setor'), removerValores('setor_localizado')"
+                    <?php
+                        if(isset($_GET['setor_localizado']) && $_GET['setor_localizado'] != ''){
+                            echo "checked";
+                        }
+                    ?>
+                    >
                     Setor
                 </label>
                 <label>
-                    <input type="radio" name="destino" value="pasta" onclick="mostrarSelect('pasta')">
+                    <input 
+                    type="radio" 
+                    name="destino" 
+                    value="pasta" 
+                    onclick="mostrarSelect('pasta'), removerValores('pasta_localizada')"
+                    <?php
+                        if(isset($_GET['pasta_localizada']) && $_GET['pasta_localizada'] != ''){
+                            echo "checked";
+                        }
+                    ?>
+                    >
                     Pasta
                 </label>
             </div>
@@ -87,17 +117,17 @@
 
         <div id="usuario" class="form-group destino" style="display: none;">
             <label for="usuario_localizado">Usuário Responsável</label>
-            <input type="text" name="usuario_localizado" placeholder="Buscar por usuário" value="<?= isset($_GET['usuario_localizado']) ? htmlspecialchars($_GET['usuario_localizado']) : '' ?>">
+            <input type="text" id="usuario_localizado"  name="usuario_localizado" placeholder="Buscar por usuário" value="<?= isset($_GET['usuario_localizado']) ? htmlspecialchars($_GET['usuario_localizado']) : '' ?>">
         </div>
 
         <div id="pasta" class="form-group destino" style="display: none;">
             <label for="pasta_localizada">Pasta</label>
-            <input type="text" name="pasta_localizada" placeholder="Buscar por pasta" value="<?= isset($_GET['pasta_localizada']) ? htmlspecialchars($_GET['pasta_localizada']) : '' ?>">
+            <input type="text" id="pasta_localizada"  name="pasta_localizada" placeholder="Buscar por pasta" value="<?= isset($_GET['pasta_localizada']) ? htmlspecialchars($_GET['pasta_localizada']) : '' ?>">
         </div>
 
         <div id="setor" class="form-group destino" style="display: none;">
             <label for="setor_localizado">Setor Encaminhado</label>
-            <input type="text" name="setor_localizado" placeholder="Buscar por setor" value="<?= isset($_GET['setor_localizado']) ? htmlspecialchars($_GET['setor_localizado']) : '' ?>">
+            <input type="text" id="setor_localizado"  name="setor_localizado" placeholder="Buscar por setor" value="<?= isset($_GET['setor_localizado']) ? htmlspecialchars($_GET['setor_localizado']) : '' ?>">
         </div>
 
         <?php
@@ -113,6 +143,31 @@
 </div>
 
 <script>
+    let eUser = document.getElementById("usuario_localizado").value;
+    let eSector = document.getElementById("setor_localizado").value;
+    let eFile = document.getElementById("pasta_localizada").value;
+
+    let idUser = document.getElementById("usuario");
+    let idSector = document.getElementById("setor");
+    let idFile = document.getElementById("pasta");
+
+    if(eUser != ''){
+        idUser.style.display = 'flex';
+    }else if(eSector != ''){
+        idSector.style.display = 'flex';
+    }else if(eFile != ''){
+        idFile.style.display = 'flex';
+    }
+
+    function removerValores(tipo) {
+        const elementos = ['usuario_localizado', 'pasta_localizada', 'setor_localizado'];
+
+        elementos.forEach(id => {
+            const el = document.getElementById(id);
+            el.value = '';
+        });
+    }
+
     function exibeFiltro(e) {
         const titulo = document.getElementById('filter-title');
         const form = document.getElementById('form-filter');

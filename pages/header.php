@@ -125,6 +125,26 @@
                     <a href="lista_processos.php">Processos</a>
                 </li>
 
+                <li class="nav-item">
+                    <a href='lista_assuntos.php'>Assuntos</a>
+                </li>
+
+                <!-- Destinos -->
+                    <li class="nav-item nav-list" onclick="toggleSubmenu(this)">
+                        <span><a href='#'>Destinos</a></span>
+                        <ul>
+
+                            <li class="subitem">
+                                <a href='lista_setores.php'>Setores</a>
+                            </li>
+                            <li class="subitem">
+                                <a href='lista_pastas.php'>Pastas</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                <!-- Fim -->
+
                 <li class="nav-item nav-list" onclick="toggleSubmenu(this)">
                     <span><a href='#'>Relatórios</a></span>
                     <ul>

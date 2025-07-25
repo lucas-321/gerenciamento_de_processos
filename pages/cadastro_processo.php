@@ -88,7 +88,7 @@
 
             <div class="form-group">
               <label for="cpf">CPF</label>
-              <input type="text" id="cpf" name="cpf" placeholder="CPF"  oninput="mascaraCpfCnpj(this)" maxlength="18" required>
+              <input type="text" id="cpf" name="cpf" placeholder="CPF"  oninput="mascaraCpfCnpj(this)" maxlength="18">
             </div>
 
             <div class="form-group">

@@ -78,7 +78,8 @@
         echo "<div class='list-items'>Nenhum setor encontrado.</div>";
     }
 
-    if ($_SESSION['categoria'] == 1 || $_SESSION['categoria'] == 2) {
+    // if ($_SESSION['categoria'] == 1 || $_SESSION['categoria'] == 2) {
+    if ($_SESSION['categoria'] < 4) {
         echo "<div class='list-items'>
                 <a href='cadastro_setor.php'>
                     <button class='list-btn blue-btn'>Novo Setor</button>

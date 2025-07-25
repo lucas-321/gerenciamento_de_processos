@@ -20,7 +20,8 @@
             exit;
         }
 
-        if ($_SESSION['categoria'] != 1 && $_SESSION['categoria'] != 2) {
+        // if ($_SESSION['categoria'] != 1 && $_SESSION['categoria'] != 2 && $_SESSION['categoria'] != 3) {
+        if ($_SESSION['categoria'] > 3) {
             echo "<div style='padding: 30px; font-family: sans-serif; text-align: center;'>
                     <h2>⚠️ Acesso Negado</h2>
                     <p>Você não tem acesso a esta funcionalidade.</p>

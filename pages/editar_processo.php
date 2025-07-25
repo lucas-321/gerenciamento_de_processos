@@ -118,7 +118,7 @@
 
             <div class="form-group">
               <label for="inscricao">Inscrições</label>
-              <input type="text" id="inscricao" name="inscricao[]" placeholder="inscricao" value="<?php echo "$inscricao";?>" required>
+              <input type="text" id="inscricao" name="inscricao[]" placeholder="inscricao" value="<?php echo "$inscricao";?>">
             </div>
 
             <div class="form-group">
@@ -128,17 +128,27 @@
 
             <div class="form-group">
               <label for="cpf_cnpj">CPF/CNPJ</label>
-              <input type="text" id="cpf_cnpj" name="cpf_cnpj" placeholder="CPF CNPJ" value="<?php echo "$cpf_cnpj";?>" required>
+              <input type="text" id="cpf_cnpj" name="cpf_cnpj" placeholder="CPF CNPJ"
+              oninput="mascaraCpfCnpj(this)"
+              value="<?php echo "$cpf_cnpj";?>"
+               maxlength="18">
             </div>
 
             <div class="form-group">
               <label for="email">E-mail</label>
-              <input type="text" id="email" name="email" placeholder="example@email.com" value="<?php echo "$email";?>" required>
+              <input type="text" id="email" name="email" placeholder="example@email.com" value="<?php echo "$email";?>">
             </div>
 
             <div class="form-group">
               <label for="telefone">Telefone</label>
-              <input type="text" id="telefone" name="telefone" placeholder="example@email.com" value="<?php echo "$telefone";?>" required>
+              <input 
+              type="text" 
+              id="telefone" 
+              name="telefone"  
+              placeholder="(xx) xxxx-xxxx" 
+              oninput="mascaraTelefone(this)" 
+              maxlength="15" 
+              value="<?php echo "$telefone";?>">
             </div>
 
             <div class="form-group">
@@ -276,6 +286,7 @@
   //Fim
   </script>
   <script src="../js/modal.js"></script>
+  <script src="../js/masks.js"></script>
 
 </body>
 </html>

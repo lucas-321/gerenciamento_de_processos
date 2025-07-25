@@ -76,7 +76,8 @@
         echo "<div class='list-items'>Nenhum assunto encontrado.</div>";
     }
 
-    if ($_SESSION['categoria'] == 1 || $_SESSION['categoria'] == 2) {
+    // if ($_SESSION['categoria'] == 1 || $_SESSION['categoria'] == 2) {
+    if ($_SESSION['categoria'] < 4) {
         echo "<div class='list-items'>
                 <button type='button' class='list-btn blue-btn' id='btnNovoAssunto'>Novo Assunto</button>
             </div>";

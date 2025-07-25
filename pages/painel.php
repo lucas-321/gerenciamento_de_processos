@@ -34,6 +34,7 @@
             }else if($_SESSION['categoria'] == 3){
                 include('utils/process_list.php');
             }else if($_SESSION['categoria'] == 4){
+                $referencia = 'painel';
                 include('utils/my_process_list.php');
             }
         ?>
