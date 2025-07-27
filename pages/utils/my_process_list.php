@@ -162,7 +162,18 @@
             $status = mb_strtolower($dados['status'], 'UTF-8');
 
             echo "<ul class='list-items'>
-                    <li>{$dados['n_protocolo']}/".date('Y', strtotime($dados['data_processo']))."</li>
+                    <li>
+                    
+                    <!--{$dados['n_protocolo']}/".date('Y', strtotime($dados['data_processo']))."-->
+
+                    <form 
+                        method='POST' 
+                        action='dados_processo.php'>
+                        <input type='hidden' name='id' value='{$dados['id']}'>
+                        <input class='link-data-process' type='submit' value={$dados['n_protocolo']}/".date('Y', strtotime($dados['data_processo'])).">
+                    </form>
+
+                    </li>
                     <li>{$dados['n_assunto']}</li>
                     <li>{$dados['nome_interessado']}</li>
                     <li>

@@ -46,6 +46,11 @@ ul li {
     border-bottom: 2px solid #c0c4c9;
 }
 
+.form-data {
+    color: red;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .list-items li{
     white-space: nowrap;
     overflow: hidden;
@@ -161,4 +166,12 @@ ul li {
 .history-title {
     text-align: center;
     border-bottom: 2px solid #c0c4c9;
+}
+
+.link-data-process {
+    cursor: pointer; 
+    font-family: 'Segoe UI'; 
+    border: none; 
+    font-size: 10pt; 
+    color: #555;
 }

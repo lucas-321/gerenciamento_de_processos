@@ -21,7 +21,7 @@
             $nome_assunto = $dados["n_assunto"];
             $assunto = $dados["assunto"];
             $inscricao = $dados["inscricao"];
-            $nome_interessado = $dados["nome_interessado"];
+            $nome_interessado = mb_strtolower($dados["nome_interessado"], 'UTF-8');
             $cpf_cnpj = $dados["cpf_cnpj"];
             $email = $dados["email"];
             $telefone = $dados["telefone"];
@@ -36,7 +36,7 @@
 ?>
 
 <ul class="list-title">
-            <li>Despacho</li>
+    <li>Informações</li>
 </ul>
 
 <div class="order-info">
@@ -50,7 +50,7 @@
 </div>
 
 <div class="order-info">
-    <span><b>Interessado:</b> <?php echo "$nome_interessado"; ?></span>
+    <span style="text-transform: capitalize"><b>Interessado:</b> <?php echo "$nome_interessado"; ?></span>
     <span><b>CPF/CNPJ:</b> <?php echo "$cpf_cnpj"; ?></span>
 </div>
 

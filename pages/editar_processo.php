@@ -153,7 +153,7 @@
 
             <div class="form-group">
               <label for="observacoes">Observações</label>
-              <textarea id="observacoes" name="observacoes" placeholder="Observações" required><?php echo "$observacoes";?></textarea>
+              <textarea id="observacoes" name="observacoes" placeholder="Observações"><?php echo "$observacoes";?></textarea>
             </div>
 
             <div class="form-group button">

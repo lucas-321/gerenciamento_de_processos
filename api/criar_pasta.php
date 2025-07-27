@@ -5,7 +5,8 @@ include("funcoes.php");
 
 header('Content-Type: application/json'); // Para garantir que o navegador entenda o JSON
 
-    if ($_SESSION["categoria"] != 1 && $_SESSION["categoria"] != 2) {
+    // if ($_SESSION["categoria"] != 1 && $_SESSION["categoria"] != 2) {
+    if ($_SESSION["categoria"] > 3) {
         echo json_encode(["mensagem" => "Acesso negado. Apenas administradores podem cadastrar pastas."]);
         exit;
     }
