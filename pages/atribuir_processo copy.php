@@ -134,8 +134,7 @@
                     if($_SESSION['categoria'] != 4){
                 ?>
                     <label>
-                        <input type="radio" name="destino" value="setor" onclick="mostrarSelect('setor'), removerValores('setor')"
-                        >
+                        <input type="radio" name="destino" value="setor" onclick="mostrarSelect('setor'), removerValores('setor')">
                         Setor
                     </label>
                     <label>
@@ -152,41 +151,29 @@
             </div>
             
             <?php
-                // if(isset($local_atual) && $local_atual != ''){
-                //     $display_local = "";
-                // }else{
-                //     $display_local = "style='display: none'";
-                // }
-
-                // if(isset($tipo_atual) && $tipo_atual == 'usuario'){
-                //     $display_usuario = "style='display: flex'";
-                //     $display_setor = "style='display: none'";
-                //     $display_pasta = "style='display: none'";
-                // }else if(isset($tipo_atual) && $tipo_atual == 'setor'){
-                //     $display_usuario = "style='display: none'";
-                //     $display_setor = "style='display: flex'";
-                //     $display_pasta = "style='display: none'";
-                // }else if(isset($tipo_atual) && $tipo_atual == 'pasta'){
-                //     $display_usuario = "style='display: none'";
-                //     $display_setor = "style='display: none'";
-                //     $display_pasta = "style='display: flex'";
-                // }else{
-                //     $display_usuario = "style='display: none'";
-                //     $display_setor = "style='display: none'";
-                //     $display_pasta = "style='display: none'";
-                // }
-
-                $display_local = (!empty($local_atual)) ? "" : "style='display: none'";
-
-                // Define os tipos possíveis
-                $tipos = ['usuario', 'setor', 'pasta'];
-                $display_usuario = $display_setor = $display_pasta = "style='display: none'";
-
-                // Se $tipo_atual for válido, ativa apenas o correspondente
-                if (in_array($tipo_atual ?? '', $tipos)) {
-                    ${"display_" . $tipo_atual} = "style='display: flex'";
+                if(isset($local_atual) && $local_atual != ''){
+                    $display_local = "";
+                }else{
+                    $display_local = "style='display: none'";
                 }
 
+                if(isset($tipo_atual) && $tipo_atual = 'usuario'){
+                    $display_usuario = "style='display: flex'";
+                    $display_setor = "style='display: none'";
+                    $display_pasta = "style='display: none'";
+                }else if(isset($tipo_atual) && $tipo_atual = 'setor'){
+                    $display_usuario = "style='display: none'";
+                    $display_setor = "style='display: flex'";
+                    $display_pasta = "style='display: none'";
+                }else if(isset($tipo_atual) && $tipo_atual = 'pasta'){
+                    $display_usuario = "style='display: none'";
+                    $display_setor = "style='display: none'";
+                    $display_pasta = "style='display: flex'";
+                }else{
+                    $display_usuario = "style='display: none'";
+                    $display_setor = "style='display: none'";
+                    $display_pasta = "style='display: none'";
+                }
             ?>
 
         </div>
@@ -252,6 +239,7 @@
                 <div 
                     id="select-setor" 
                     class="destiny-options" 
+                    style="display:none;"
                     <?php echo $display_setor; ?>
                 >
                     <label for="setor"><b>Escolha o setor:</b></label>
@@ -286,6 +274,7 @@
                 <div 
                     id="select-pasta" 
                     class="destiny-options" 
+                    style="display:none;"
                     <?php echo $display_pasta; ?>
                 >
                     <label for="pasta"><b>Escolha a pasta:</b></label>
