@@ -112,7 +112,7 @@
                     if ($i == $pagina) {
                         echo "<strong style='margin: 0 5px;'>$i</strong>"; // página atual destacada
                     } else {
-                        echo "<a href='lista_processos.php?page=$i&$filtrosURL' style='margin: 0 5px;'>$i</a>"; // link para outras páginas
+                        echo "<a href='registros.php?page=$i&$filtrosURL' style='margin: 0 5px;'>$i</a>"; // link para outras páginas
                     }
                 }
 

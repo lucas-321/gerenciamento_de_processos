@@ -120,6 +120,42 @@
             }
 
             include('utils/history_list.php');
+            
+            if(isset($tipo_atual)) {
+
+                switch($tipo_atual){
+                    case 'usuario':
+                        $check_user = 'checked';
+                        $check_sector = '';
+                        $check_folder = '';
+                        $valor_destino = 'usuario';
+                        break;
+                    case 'setor':
+                        $check_user = '';
+                        $check_sector = 'checked';
+                        $check_folder = '';
+                        $valor_destino = 'setor';
+                        break;
+                    case 'pasta':
+                        $check_user = '';
+                        $check_sector = '';
+                        $check_folder = 'checked';
+                        $valor_destino = 'pasta';
+                        break;
+                    default:
+                        $check_user = '';
+                        $check_sector = '';
+                        $check_folder = '';
+                        $valor_destino = '';
+                        break;
+                }
+            }else{
+                $check_user = '';
+                $check_sector = '';
+                $check_folder = '';
+                $valor_destino = '';
+            }
+
             if($status != 'Finalizado'){
         ?>
 
@@ -128,18 +164,23 @@
             <span><b>Categoria de Destino</b></span>
             <div class="radios">
                 <label>
-                    <input type="radio" name="destino" value="usuario" onclick="mostrarSelect('usuario'), removerValores('usuario')"> Usuário
+                    <input type="radio" name="destino" value="usuario" onclick="mostrarSelect('usuario'), removerValores('usuario')"
+                    <?php echo "$check_user"; ?>
+                    > Usuário
                 </label>
                 <?php
                     if($_SESSION['categoria'] != 4){
                 ?>
                     <label>
                         <input type="radio" name="destino" value="setor" onclick="mostrarSelect('setor'), removerValores('setor')"
+                        <?php echo "$check_sector"; ?>
                         >
                         Setor
                     </label>
                     <label>
-                        <input type="radio" name="destino" value="pasta" onclick="mostrarSelect('pasta'), removerValores('pasta')">
+                        <input type="radio" name="destino" value="pasta" onclick="mostrarSelect('pasta'), removerValores('pasta')"
+                        <?php echo "$check_folder"; ?>
+                        >
                         Pasta
                     </label>
                     <!-- <label>
@@ -346,7 +387,7 @@
 
                 <input type="hidden" name="id" value="<?php echo $_POST['id']; ?>">
 
-                <input type="hidden" name="destino" id="destino" value="">
+                <input type="hidden" name="destino" id="destino" value="<?php echo "$valor_destino"; ?>">
 
                 <div class="form-group button">
                     <button class="form-btn blue-btn" type="submit">Atribuir</button>

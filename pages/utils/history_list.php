@@ -12,7 +12,7 @@
                 END AS nome_destino
             FROM localizacoes l
             WHERE l.id_processo = ?
-            ORDER BY l.localizado_em DESC";
+            ORDER BY l.localizado_em ASC";
 
     $stmt = $conexao->prepare($sql);
     $stmt->bind_param("i", $id_processo);
