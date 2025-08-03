@@ -364,7 +364,7 @@
                     <select id="status" name="status">
                         <?php 
                             if($status != ''){
-                                echo "<option value=$status>$status</option>";
+                                echo "<option value='$status'>$status</option>";
                             }else{
                                 echo "<option value=''>Selecione Status</option>";
                             }

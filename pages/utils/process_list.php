@@ -129,6 +129,7 @@
         $assunto = isset($_GET['assunto']) ? trim($_GET['assunto']) : '';
         $usuario_localizado = isset($_GET['usuario_localizado']) ? trim($_GET['usuario_localizado']) : '';
         $pasta_localizada = isset($_GET['pasta_localizada']) ? trim($_GET['pasta_localizada']) : '';
+        $setor_localizado = isset($_GET['setor_localizado']) ? trim($_GET['setor_localizado']) : '';
 
         $condicoes = "WHERE processos.ativo = 1";
 
@@ -174,7 +175,7 @@
 
         if (!empty($setor_localizado)) {
             $buscaSegura = mysqli_real_escape_string($conexao, $setor_localizado);
-            $condicoes .= " AND (setores.nome LIKE '%$buscaSegura%')";
+            $condicoes .= " AND (setores.nome LIKE '%$buscaSegura%') OR (setores.sigla LIKE '%$buscaSegura%')";
         }
         
         // Agora vamos buscar a última localização também
