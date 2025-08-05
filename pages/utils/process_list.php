@@ -267,7 +267,7 @@
             
             $status = mb_strtolower($dados['status'], 'UTF-8');
 
-            echo "<ul class='list-items'>
+            echo "<ul class='list-items' tabindex=0 >
                     <li>
                     <!--{$dados['n_protocolo']}/".date('Y', strtotime($dados['data_processo']))."-->
 
@@ -451,4 +451,18 @@
         }
     }
 
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     const elemento = document.querySelector('.list-items');
+    //     elemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    //     elemento.focus();
+    // });
+
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     document.querySelector('.list-model').scrollIntoView({
+    //         behavior: 'smooth', // rolagem suave
+    //         block: 'center'     // centraliza o elemento na tela
+    //     });
+    // });
+
 </script>
+<script src="../js/geral.js"></script>

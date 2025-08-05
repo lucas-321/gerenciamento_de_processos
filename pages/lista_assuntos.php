@@ -43,6 +43,7 @@
   </div>
   <script src="../js/modal2.js"></script>
   <script src="../js/subjectEdit.js"></script>
+  <script src="../js/geral.js"></script>
 
 </body>
 </html>

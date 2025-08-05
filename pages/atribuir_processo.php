@@ -414,6 +414,7 @@
   </div>
 
   <script>
+    let categoria = <?php echo $_SESSION['categoria']; ?>
     /*document.getElementById("cadastroForm").addEventListener("submit", function(e) {
         e.preventDefault();
 
@@ -425,7 +426,13 @@
         })
         .then(res => res.json())
         .then(data => alert(data.mensagem))
-        .then(window.location.href ="painel.php");
+        .then(
+            if(categoria > 2){
+                window.location.href = "painel.php";
+            }else{
+                window.location.href = "lista_processos.php";
+            }
+        );
     });*/
     
     //Deixar aqui pra ver o erro, depois comentar e utilizar o código acima
@@ -444,7 +451,11 @@
         try {
             const data = JSON.parse(text);
             alert(data.mensagem);
-            window.location.href = "painel.php";
+            if(categoria > 2){
+                window.location.href = "painel.php";
+            }else{
+                window.location.href = "lista_processos.php";
+            }
         } catch (e) {
             console.error("Erro ao interpretar JSON:", e);
         }

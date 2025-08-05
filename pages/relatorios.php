@@ -30,5 +30,6 @@
     ?>
 
   </div>
+  <script src="../js/geral.js"></script>
 </body>
 </html>
