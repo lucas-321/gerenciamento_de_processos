@@ -74,7 +74,20 @@
 
             <div class="form-group">
               <label>Nº Protocolo</label>
-              <input type="text" id="n_protocolo" name="n_protocolo" placeholder="Nº de Protocolo" value="<?php echo "$n_protocolo";?>" required>
+              <input 
+                type="text" 
+                id="n_protocolo" 
+                name="n_protocolo" 
+                placeholder="Nº de Protocolo" 
+                value="<?php echo "$n_protocolo";?>" 
+                required
+                <?php
+                  if($_SESSION['categoria'] > 2){
+                    echo "readonly";
+                  }
+                ?>
+                onclick="bloqueiaAlteracao()"
+              >
             </div>
 
             <div class="form-group">
@@ -284,6 +297,10 @@
   nProtocoloInput.addEventListener("blur", verificarDuplicidade);
   dataProcessoInput.addEventListener("blur", verificarDuplicidade);
   //Fim
+
+  function bloqueiaAlteracao(){
+    alert("Somente administradores podem alterar números de protocolo, favor converse com o seu gerente.")
+  }
   </script>
   <script src="../js/modal.js"></script>
   <script src="../js/masks.js"></script>
