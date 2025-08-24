@@ -150,7 +150,7 @@
                         <label>
                             <input type="radio" name="status" value="Certidão elaborada" onclick="mostrarArquivo('arquivos'), showBtn('certidao')">Certidão
 
-                            <button id="certidaoBtn" class="form-btn green-btn" style="display: none;" type="button" onclick="showBtn('certidao')">Criar Certidão</button>
+                            <button id="certidaoBtn" class="form-btn green-btn" style="display: none;" type="button" onclick="criarCertidao()">Criar Certidão</button>
                         </label>
                     </div>
 
@@ -241,6 +241,24 @@
         const form = document.createElement("form");
         form.method = "POST";
         form.action = "elaborar_despacho.php";
+
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "id";
+        input.value = id;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function criarCertidao() {
+        const id = document.querySelector("input[name='id']").value;
+
+        // Cria um form temporário para enviar os dados via POST
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "elaborar_certidao.php";
 
         const input = document.createElement("input");
         input.type = "hidden";

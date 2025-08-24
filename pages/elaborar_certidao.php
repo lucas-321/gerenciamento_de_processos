@@ -56,7 +56,7 @@
 
       <form id="certidaoForm">
 
-        <input type="texto" name="processo" value="<?php echo $_POST['id']; ?>">
+        <input type="hidden" name="processo" value="<?php echo $_POST['id']; ?>">
         
         <div class="form-group">
             <label for="tipo">Tipo de Documento:</label>

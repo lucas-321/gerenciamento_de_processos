@@ -121,9 +121,25 @@
                     }else if ($_SESSION["categoria"] == 3) {
                 ?>
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="lista_processos.php">Processos</a>
-                </li>
+                </li> -->
+
+                <!-- Processos -->
+                    <li class="nav-item nav-list" onclick="toggleSubmenu(this)">
+                        <span><a href='#'>Processos</a></span>
+                        <ul>
+
+                            <li class="subitem">
+                                <a href='lista_processos.php'>Geral</a>
+                            </li>
+                            <li class="subitem">
+                                <a href='painel_analista.php'>Meus Processos</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                <!-- Fim -->
 
                 <li class="nav-item">
                     <a href='lista_assuntos.php'>Assuntos</a>

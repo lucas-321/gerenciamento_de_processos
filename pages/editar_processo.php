@@ -294,12 +294,15 @@
   }
 
   // Aciona quando sair do campo (ou pode usar 'input' se quiser mais instantâneo)
-  nProtocoloInput.addEventListener("blur", verificarDuplicidade);
+  // nProtocoloInput.addEventListener("blur", verificarDuplicidade);
+  nProtocoloInput.addEventListener("change", verificarDuplicidade);
   dataProcessoInput.addEventListener("blur", verificarDuplicidade);
   //Fim
 
   function bloqueiaAlteracao(){
-    alert("Somente administradores podem alterar números de protocolo, favor converse com o seu gerente.")
+    if(<?php echo $categoria; ?> > 3){
+      alert("Somente administradores podem alterar números de protocolo, favor converse com o seu gerente.");
+    }
   }
   </script>
   <script src="../js/modal.js"></script>
