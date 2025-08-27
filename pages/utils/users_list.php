@@ -114,7 +114,7 @@
             echo "<ul class='list-items'>
                     <li>
                         <div class='item-list-painel'>
-                            <img src='../fotos_perfil/{$dados['foto']}' alt='img-perfil'>
+                            <img src='../fotos_perfil/{$dados['foto']}' alt='img-perfil'  onError="."this.onerror=null;this.src='../fotos_perfil/default_profile.png';".">
                         </div>
                     </li>
                     <li>{$dados['nome']}</li>

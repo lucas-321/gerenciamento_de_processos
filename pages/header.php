@@ -193,7 +193,7 @@
                     <a href="#">
                     <div class="profile-header">
                         <div class='item-list-header'>
-                            <img src='../fotos_perfil/<?php echo "$_SESSION[foto]"; ?>' alt='img-perfil'>
+                            <img src='../fotos_perfil/<?php echo "$_SESSION[foto]"; ?>' alt='img-perfil' onError="this.onerror=null;this.src='../fotos_perfil/default_profile.png';">
                         </div>
                         <div class="profile-data">
                             <?php
