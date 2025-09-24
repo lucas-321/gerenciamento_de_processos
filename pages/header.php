@@ -50,7 +50,7 @@
                     if ($_SESSION["categoria"] == 1 || $_SESSION["categoria"] == 2) {
                 ?>
                         <li class="nav-item">
-                            <a href='painel.php'>Usuários</a>
+                            <a href='lista_usuarios.php'>Usuários</a>
                         </li>
                         <!-- <li class="nav-item">
                             <a href='lista_processos.php'>Processos</a>
@@ -70,6 +70,23 @@
                             </ul>
                         </li>
                         <!-- Fim -->
+
+                        <!-- Certidões -->
+                        <li class="nav-item nav-list" onclick="toggleSubmenu(this)">
+                            <span><a href='#'>Certidões</a></span>
+                            <ul>
+
+                                <li class="subitem">
+                                    <a href='lista_certidoes.php'>Certidões</a>
+                                </li>
+                                <li class="subitem">
+                                    <a href='lista_certidoes.php?cargo=coordenador'>Minhas Certidões</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        <!-- Fim -->
+
                         <li class="nav-item">
                             <a href='lista_assuntos.php'>Assuntos</a>
                         </li>
@@ -117,6 +134,8 @@
                             </ul>
                         </li>
                         <!-- Fim -->
+
+                
                 <?php
                     }else if ($_SESSION["categoria"] == 3) {
                 ?>
@@ -139,6 +158,22 @@
 
                         </ul>
                     </li>
+                <!-- Fim -->
+
+                <!-- Certidões -->
+                <li class="nav-item nav-list" onclick="toggleSubmenu(this)">
+                    <span><a href='#'>Certidões</a></span>
+                    <ul>
+
+                        <li class="subitem">
+                            <a href='lista_certidoes.php'>Certidões</a>
+                        </li>
+                        <li class="subitem">
+                            <a href='lista_certidoes.php?cargo=coordenador'>Minhas Certidões</a>
+                        </li>
+
+                    </ul>
+                </li>
                 <!-- Fim -->
 
                 <li class="nav-item">
@@ -175,6 +210,12 @@
                 <li class="nav-item">
                     <a href="painel_analista.php">Meus Processos</a>
                 </li>
+
+                <!-- Certidões -->
+                <li class="nav-item nav-list" onclick="toggleSubmenu(this)">
+                    <a href='lista_certidoes.php'>Minhas Certidões</a>
+                </li>
+                <!-- Fim -->
 
                 <li class="nav-item nav-list" onclick="toggleSubmenu(this)">
                     <span><a href='#'>Relatórios</a></span>

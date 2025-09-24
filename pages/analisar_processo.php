@@ -47,6 +47,26 @@
 
         }
 
+        // Verificar se existem certidões
+        $sql_certidoes = "SELECT *
+                FROM certidoes
+                WHERE processo = $_POST[id]
+                AND ativo = 1";
+        $result_certidoes = mysqli_query($conexao, $sql_certidoes);
+
+        if(mysqli_num_rows($result_certidoes) > 0) {
+
+            while($dados = mysqli_fetch_assoc($result_certidoes)){
+                $certidao_id = $dados["id"];
+
+                $btn_certidao = "<span id='certidaoBtn' style='display: none;'>Processo já possui certidão</span>";
+            }
+        }else{
+            $btn_certidao = "<button id='certidaoBtn' class='form-btn green-btn' style='display: none;' type='button' onclick='criarCertidao()'>Criar Certidão</button>";
+        }
+        // echo "$sql_certidoes";
+        //Fim
+
   ?>
 
   <div class="content">
@@ -141,17 +161,22 @@
                 <div id="sob-analise" class="destiny-options" style="display:none;">
                     <label for="usuario"><b>Documento Elaborado:</b></label>
                     <div class="radios">
+
+                        <label>
+                            <input type="radio" name="status" value="Certidão elaborada" onclick="mostrarArquivo('arquivos'), showBtn('certidao')">Certidão
+
+                            <?php echo $btn_certidao; ?>
+
+                            <!-- <button id="certidaoBtn" class="form-btn green-btn" style="display: none;" type="button" onclick="criarCertidao()">Criar Certidão</button> -->
+                        </label>
+
                         <label>
                             <input type="radio" name="status" value="Despacho elaborado" onclick="mostrarArquivo('arquivos'), showBtn('despacho')">Despacho
 
                             <button id="despachoBtn" class="form-btn green-btn" style="display: none;" type="button" onclick="criarDespacho()">Criar Despacho</button>
 
                         </label>
-                        <label>
-                            <input type="radio" name="status" value="Certidão elaborada" onclick="mostrarArquivo('arquivos'), showBtn('certidao')">Certidão
-
-                            <button id="certidaoBtn" class="form-btn green-btn" style="display: none;" type="button" onclick="criarCertidao()">Criar Certidão</button>
-                        </label>
+                        
                     </div>
 
                     <!--<div id="arquivos">
@@ -228,7 +253,7 @@
 
         // Mostra apenas o que foi selecionado
         if (documento === 'despacho') {
-            document.getElementById('despachoBtn').style.display = 'flex';
+            // document.getElementById('despachoBtn').style.display = 'flex';
         } else if (documento === 'certidao') {
             document.getElementById('certidaoBtn').style.display = 'flex';
         }

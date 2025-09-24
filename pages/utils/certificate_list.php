@@ -1,113 +1,10 @@
 <?php include('utils/process_filter.php'); ?>
 
-<!-- <div class="filter-model search">
-
-    <ul id="filter-title" class="filter-title rounded-border-bottom">
-        <li>Filtro de Busca</li>
-        <li onclick="exibeFiltro(this)">Exibir</li>
-    </ul>
-
-    <form id="form-filter" method="GET" action="" style="display: none; margin-bottom: 20px;">
-
-        <div class="filter-row">
-            <div class="filter-group">
-                <label for="n_protocolo">Nº de Protocolo</label>
-                <input type="text" name="n_protocolo" placeholder="Nº de Protocolo" value="<?= isset($_GET['n_protocolo']) ? htmlspecialchars($_GET['n_protocolo']) : '' ?>">
-            </div>
-
-            <div class="filter-group">
-                <label for="interessado">Nome do Interessado</label>
-                <input type="text" name="interessado" placeholder="Pesquisar por nome" value="<?= isset($_GET['interessado']) ? htmlspecialchars($_GET['interessado']) : '' ?>">
-            </div>
-        </div>
-
-        <div class="filter-row">
-            <div class="filter-group">
-                <label for="data_inicial">Data Inicial</label>
-                <input type="date" name="data_inicial" value="<?= isset($_GET['data_inicial']) ? htmlspecialchars($_GET['data_inicial']) : '' ?>">
-            </div>
-
-            <div class="filter-group">
-                <label for="data_final">Data Final</label>
-                <input type="date" name="data_final" value="<?= isset($_GET['data_final']) ? htmlspecialchars($_GET['data_final']) : '' ?>">
-            </div>
-        </div>
-
-        <div class="filter-row">
-            <div class="filter-group">
-                <label for="cpf_cnpj">CPF ou CNPJ</label>
-                <input type="text" name="cpf_cnpj" placeholder="Pesquisar por CPF ou CNPJ" value="<?= isset($_GET['cpf_cnpj']) ? htmlspecialchars($_GET['cpf_cnpj']) : '' ?>">
-            </div>
-
-            <div class="filter-group">
-                <label for="assunto">Assunto</label>
-                <select id="assunto" name="assunto">
-                    <option value=""></option>
-                    <?php 
-                        $sql = "SELECT *
-                        FROM assuntos 
-                        WHERE ativo = 1
-                        ORDER BY nome";
-                        $result = mysqli_query($conexao, $sql);
-                        if(mysqli_num_rows($result) > 0) {
-                            while($dados = mysqli_fetch_assoc($result)){
-                                echo "<option value='$dados[id]'>$dados[nome]</option>";
-                            }
-                        }else{
-                            echo "<option value=''>Não há assuntos cadastrados</option>";
-                        }   
-                    ?>
-                </select>
-            </div>
-        </div>
-
-        <div class="destiny-selection">
-            <span><b>Destino</b></span>
-            <div class="radios">
-                <label>
-                    <input type="radio" name="destino" value="usuario" onclick="mostrarSelect('usuario')"> Usuário
-                </label>
-                <label>
-                    <input type="radio" name="destino" value="setor" onclick="mostrarSelect('setor')">
-                    Setor
-                </label>
-                <label>
-                    <input type="radio" name="destino" value="pasta" onclick="mostrarSelect('pasta')">
-                    Pasta
-                </label>
-            </div>
-        </div>
-
-        <div id="usuario" class="form-group destino" style="display: none;">
-            <label for="usuario_localizado">Usuário Responsável</label>
-            <input type="text" name="usuario_localizado" placeholder="Buscar por usuário" value="<?= isset($_GET['usuario_localizado']) ? htmlspecialchars($_GET['usuario_localizado']) : '' ?>">
-        </div>
-
-        <div id="pasta" class="form-group destino" style="display: none;">
-            <label for="pasta_localizada">Pasta</label>
-            <input type="text" name="pasta_localizada" placeholder="Buscar por pasta" value="<?= isset($_GET['pasta_localizada']) ? htmlspecialchars($_GET['pasta_localizada']) : '' ?>">
-        </div>
-
-        <div id="setor" class="form-group destino" style="display: none;">
-            <label for="setor_localizado">Setor Encaminhado</label>
-            <input type="text" name="setor_localizado" placeholder="Buscar por setor" value="<?= isset($_GET['setor_localizado']) ? htmlspecialchars($_GET['setor_localizado']) : '' ?>">
-        </div>
-
-        <div class="form-group button">
-            <button type="submit" class="form-btn blue-btn">Buscar</button>
-        </div>
-
-    </form>
-
-</div> -->
-
 <div class="list-model">
     <ul class="list-title">
         <li>Nº Protocolo</li>
         <li>Assunto</li>
         <li>Interessado</li>
-        <!-- <li>Inscrição</li> -->
-        <!-- <li>Data de Entrada</li> -->
         <li>Localização</li>
         <li></li>
         <li></li>
@@ -115,6 +12,8 @@
     </ul>
 
     <?php
+
+        $meuId = $_SESSION["usuario_id"];
 
         $porPagina = 10;
         $pagina = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -183,16 +82,27 @@
             $buscaSegura = mysqli_real_escape_string($conexao, $setor_localizado);
             $condicoes .= " AND (setores.nome LIKE '%$buscaSegura%') OR (setores.sigla LIKE '%$buscaSegura%')";
         }
-        
-        // Agora vamos buscar a última localização também
+
+
+        //Acho que isso pode ser enxuto se jogar o cargo de coordenador no primeiro if
+        if ($_SESSION["categoria"] > 3) {
+            $condicoes .= " AND certidoes.criado_por = $meuId";
+        }else if($_SESSION["categoria"] <= 3 && isset($_GET['cargo']) && ($_GET['cargo']=== 'coordenador')) {
+            $condicoes .= "  AND certidoes.criado_por = $meuId";
+        }else {
+            $condicoes .= "";
+        }
+
         $sql = "SELECT processos.*, 
                assuntos.nome AS n_assunto, 
                localizacoes.destino_id, 
                localizacoes.destino_tipo,
                agentes.nome AS nome_usuario_destino,
-               pastas.nome
+               pastas.nome,
+               certidoes.id AS certidao_id
         FROM processos
         INNER JOIN assuntos ON processos.assunto = assuntos.id
+        INNER JOIN certidoes ON processos.id = certidoes.processo
         LEFT JOIN (
             SELECT l1.*
             FROM localizacoes l1
@@ -207,7 +117,8 @@
         LEFT JOIN pastas ON localizacoes.destino_tipo = 'pasta' AND localizacoes.destino_id = pastas.id
         LEFT JOIN setores ON localizacoes.destino_tipo = 'setor' AND localizacoes.destino_id = setores.id
         $condicoes
-        ORDER BY processos.created_at DESC
+        AND certidoes.ativo = 1
+        ORDER BY certidoes.created_at DESC
         LIMIT $porPagina OFFSET $offset";
 
         // echo $sql;
@@ -222,6 +133,7 @@
             $destino_tipo = $dados['destino_tipo'];
             $destino_nome = "Não localizado";
             $pendencia = $dados['pendencia'];
+            $certidao_id = $dados['certidao_id'];
 
             if (!empty($destino_id) && !empty($destino_tipo)) {
                 // Consultar o nome correto conforme o tipo
@@ -242,40 +154,20 @@
             if($dados['status'] == 'Pendência'){
                 $btn = "<button class='list-btn yellow-btn' type='submit'>Pendência</button>";
             }else{
-                $btn = "<button class='list-btn green-btn' type='submit'>Atribuir</button>";
+                $btn = "<button class='list-btn green-btn' type='submit'>Certidão</button>";
             }
 
-            if($destino_tipo != 'usuario'){
-                $form = "<form id='cadastroForm' method='POST' action='atribuir_processo.php'>
-                                <input type='hidden' name='id' value='$dados[id]'>
+            $form = "<form id='cadastroForm' method='POST' action='certidao.php'>
+                                <input type='hidden' name='id' value='$certidao_id'>
                                 <div class='form-group button'>
                                     $btn
                                 </div>
                             </form>";
-            }else if($destino_id == $_SESSION['agente_id'] || $destino_nome == "Não localizado"){
-                $form = "<form id='cadastroForm' method='POST' action='atribuir_processo.php'>
-                                <input type='hidden' name='id' value='$dados[id]'>
-                                <div class='form-group button'>
-                                    $btn
-                                </div>
-                            </form>";
-            }else{
-                // Provisório enquanto o sistema é só utilizado pelo Protocolo
-                // $form = "<button class='list-btn gray-btn' type='submit'>Já Atribuído</button>";
-                //O sistema geral, deve comentar abaixo e descomentar em cima
-                $form = "<form id='cadastroForm' method='POST' action='atribuir_processo.php'>
-                                <input type='hidden' name='id' value='$dados[id]'>
-                                <div class='form-group button'>
-                                    <button class='list-btn gray-btn' type='submit'>Já Atribuído</button>
-                                </div>
-                            </form>";
-            }
             
             $status = mb_strtolower($dados['status'], 'UTF-8');
 
             echo "<ul class='list-items' tabindex=0 >
                     <li>
-                    <!--{$dados['n_protocolo']}/".date('Y', strtotime($dados['data_processo']))."-->
 
                         <form 
                             method='POST' 
@@ -298,17 +190,18 @@
                 echo "<li>$form</li>
 
                         <li>
-                            <form id='cadastroForm' method='POST' action='editar_processo.php'>
-                                <input type='hidden' name='id' value='$dados[id]'>
+                            <form id='cadastroForm' method='POST' action='editar_certidao.php'>
+                                <input type='hidden' name='id' value='$certidao_id'>
                                 <div class='form-group button'>
                                     <button class='list-btn blue-btn' type='submit'>Editar</button>
                                 </div>
                             </form>
                         </li>
                         <li>
-                            <form id='deleteForm{$dados['id']}'>
+                            <form id='deleteForm$certidao_id'>
                                 <input type='hidden' name='n_protocolo' value='{$dados['n_protocolo']}/".date('Y', strtotime($dados['data_processo']))."'>
-                                <input type='hidden' name='id' value='{$dados['id']}'>
+                                <input type='hidden' name='id' value='$certidao_id'>
+                                <input type='hidden' name='processo' value='{$dados['id']}'>
                                 <button class='list-btn red-btn' type='submit' onclick='deletar(this)'>Excluir</button>
                             </form>
                         </li>";
@@ -328,29 +221,13 @@
             }
 
     }else{
-        echo "<div class='list-items'><span>Não há processos cadastrados</span></div>";
+        echo "<div class='list-items'><span>Não há certidões cadastradas</span></div>";
     }
-                    
-            if ($_SESSION['categoria'] == 1 || $_SESSION['categoria'] == 2 || $_SESSION['categoria'] == 3) {
-
-                echo "<div class='list-items'>
-                        <a href='cadastro_processo.php'>
-                            <button class='list-btn blue-btn'>Novo Processo</button>
-                        </a>
-                    </div>";
-            }
-
-            // $sqlTotal = "SELECT COUNT(*) as total 
-            // FROM processos 
-            // WHERE ativo = 1 AND id <> 1";
-
-            // $sqlTotal = "SELECT COUNT(*) as total 
-            // FROM processos 
-            // $condicoes";
 
             $sqlTotal = "SELECT COUNT(*) as total 
              FROM processos
              INNER JOIN assuntos ON processos.assunto = assuntos.id
+             INNER JOIN certidoes ON processos.id = certidoes.processo
              LEFT JOIN (
                  SELECT l1.*
                  FROM localizacoes l1
@@ -364,7 +241,8 @@
              LEFT JOIN agentes ON localizacoes.destino_tipo = 'usuario' AND localizacoes.destino_id = agentes.id
              LEFT JOIN pastas ON localizacoes.destino_tipo = 'pasta' AND localizacoes.destino_id = pastas.id
              LEFT JOIN setores ON localizacoes.destino_tipo = 'setor' AND localizacoes.destino_id = setores.id
-             $condicoes";
+             $condicoes
+             AND certidoes.ativo = 1";
 
             //  echo "$sqlTotal";
              
@@ -441,11 +319,11 @@
     }
 
     function deletar(botao) {
-        if (confirm('Você tem certeza que deseja excluir permanentemente este processo?')) {
+        if (confirm('Você tem certeza que deseja excluir permanentemente esta certidão?')) {
             const form = botao.closest("form");
             const formData = new FormData(form);
 
-            fetch("../api/excluir_processo.php", {
+            fetch("../api/excluir_certidao.php", {
                 method: "POST",
                 body: formData
             })
@@ -456,19 +334,6 @@
             });
         }
     }
-
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     const elemento = document.querySelector('.list-items');
-    //     elemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    //     elemento.focus();
-    // });
-
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     document.querySelector('.list-model').scrollIntoView({
-    //         behavior: 'smooth', // rolagem suave
-    //         block: 'center'     // centraliza o elemento na tela
-    //     });
-    // });
 
 </script>
 <script src="../js/geral.js"></script>

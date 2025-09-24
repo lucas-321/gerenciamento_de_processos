@@ -190,8 +190,10 @@
   }
 
   // Aciona quando sair do campo (ou pode usar 'input' se quiser mais instantâneo)
-  nProtocoloInput.addEventListener("blur", verificarDuplicidade);
-  dataProcessoInput.addEventListener("blur", verificarDuplicidade);
+  // nProtocoloInput.addEventListener("blur", verificarDuplicidade);
+  // dataProcessoInput.addEventListener("blur", verificarDuplicidade);
+  nProtocoloInput.addEventListener("change", verificarDuplicidade);
+  dataProcessoInput.addEventListener("change", verificarDuplicidade);
   //Fim
   </script>
   <script src="../js/modal.js"></script>

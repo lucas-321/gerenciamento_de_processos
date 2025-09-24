@@ -18,6 +18,10 @@
     $assunto = isset($_GET['assunto']) ? trim($_GET['assunto']) : '';
     $usuario_localizado = isset($_GET['usuario_localizado']) ? trim($_GET['usuario_localizado']) : '';
 
+    $setor_localizado = isset($_GET['setor_localizado']) ? trim($_GET['setor_localizado']) : '';
+
+    $pasta_localizada = isset($_GET['pasta_localizada']) ? trim($_GET['pasta_localizada']) : '';
+
     if (!empty($n_protocolo)) {
         $condicoes .= " AND (n_protocolo = $n_protocolo)";
     }
@@ -92,6 +96,8 @@
                 ) l2 ON l1.id_processo = l2.id_processo AND l1.localizado_em = l2.max_localizado
             ) AS localizacoes ON localizacoes.id_processo = processos.id
             LEFT JOIN agentes ON localizacoes.destino_tipo = 'usuario' AND localizacoes.destino_id = agentes.id
+            LEFT JOIN setores ON localizacoes.destino_tipo = 'setor' AND localizacoes.destino_id = setores.id
+            LEFT JOIN pastas ON localizacoes.destino_tipo = 'pasta' AND localizacoes.destino_id = pastas.id
             $condicoes
             ORDER BY assuntos.nome ASC, processos.created_at DESC";
 

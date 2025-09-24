@@ -12,12 +12,16 @@ if ($_SESSION["categoria"] != 1 && $_SESSION["categoria"] != 2) {
 $id = $_POST["id"];
 $cor = $_POST["cor"];
 $nome = $_POST["nome"];
+$numero = $_POST["numero"];
+$letra = $_POST["letra"];
+$assunto = $_POST["assunto"];
+$status = $_POST["status"];
 
 $conexao->begin_transaction();
 
 try {
     // 1. Buscar dados antigos
-    $stmtOld = $conexao->prepare("SELECT nome, cor FROM pastas WHERE id = ?");
+    $stmtOld = $conexao->prepare("SELECT nome, numero, letra, assunto, status, cor FROM pastas WHERE id = ?");
     $stmtOld->bind_param("i", $id);
     $stmtOld->execute();
     $resultado = $stmtOld->get_result();
@@ -31,9 +35,13 @@ try {
     // Monta a query de UPDATE do pasta dinamicamente
     $queryPasta = "UPDATE pastas 
     SET nome = ?,
+    numero = ?,
+    letra = ?,
+    assunto = ?,
+    status = ?,
     cor = ?";
-    $params = [$nome, $cor];
-    $types = "ss";
+    $params = [$nome, $numero, $letra, $assunto, $status, $cor];
+    $types = "ssssss";
 
     $queryPasta .= " WHERE id = ?";
     $params[] = $id;
@@ -47,6 +55,18 @@ try {
     $alteracoes = [];
     if ($antigo["nome"] !== $nome) {
         $alteracoes[] = "nome de \"{$antigo['nome']}\" para \"$nome\"";
+    }
+    if ($antigo["numero"] !== $numero) {
+        $alteracoes[] = "numero de \"{$antigo['numero']}\" para \"$numero\"";
+    }
+    if ($antigo["letra"] !== $letra) {
+        $alteracoes[] = "letra de \"{$antigo['letra']}\" para \"$letra\"";
+    }
+    if ($antigo["assunto"] !== $assunto) {
+        $alteracoes[] = "assunto de \"{$antigo['assunto']}\" para \"$assunto\"";
+    }
+    if ($antigo["status"] !== $status) {
+        $alteracoes[] = "status de \"{$antigo['status']}\" para \"$status\"";
     }
     if ($antigo["cor"] !== $cor) {
         $alteracoes[] = "cor de \"{$antigo['cor']}\" para \"$cor\"";

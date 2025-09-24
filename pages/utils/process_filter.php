@@ -62,6 +62,19 @@
             </div>
         </div>
 
+        <div class="filter-row">
+            <div class="filter-group">
+                <label for="inscricao">Inscrição</label>
+                <input 
+                type="text" 
+                name="inscricao" 
+                placeholder="Informe o nº de inscrição" 
+                value="<?= isset($_GET['inscricao']) ? htmlspecialchars($_GET['inscricao']) : '' ?>"
+                oninput="mascaraInscricao(this)" 
+                maxlength="18">
+            </div>
+        </div>
+
         <?php
             if($referencia == 'painel'){
 
@@ -142,6 +155,7 @@
 
 </div>
 
+<script src="../js/masks.js"></script>
 <script>
     let eUser = document.getElementById("usuario_localizado").value;
     let eSector = document.getElementById("setor_localizado").value;

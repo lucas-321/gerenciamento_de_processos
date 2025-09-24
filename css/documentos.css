@@ -1,0 +1,71 @@
+.certidao {
+    width: 60%;
+    background: whitesmoke;
+    color: black;
+    font-family: 'Times New Roman', Times, serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+}
+
+.cabecalho {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-weight: bold;
+}
+
+.logo-docs {
+    margin: .625rem;
+}
+
+.logo-docs img {
+    width: 5rem;
+}
+
+.subtitle {
+    font-size: 12px;
+}
+
+.dados_prefeitura {
+    display: flex;
+    flex-direction: column;
+}
+
+.titulo {
+    margin: 2rem;
+}
+
+.conteudo {
+    margin: 0 3cm;
+}
+
+.bloco {
+    text-align: justify;
+    font-size: 12pt;
+    margin: 1rem 0;
+    line-height: 1.5;
+}
+
+.validacao {
+    text-align: justify;
+    font-size: 10pt;
+    font-weight: bold;
+    margin: .625rem 0;
+}
+
+.assinatura{
+    margin: 4rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.assinatura span{
+    width: 33%;
+    text-align: center;
+    border-top: 1px solid black;
+}

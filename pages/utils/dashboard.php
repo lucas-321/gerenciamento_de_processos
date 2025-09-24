@@ -2,7 +2,6 @@
 // ======================
 //  CONEXÃO E PREPARO
 // ======================
-include('header.php');
 include('../api/conexao.php');
 
 // Se você já tem $condicoes para filtrar (ex: WHERE …), use aqui
@@ -26,14 +25,6 @@ if($anoSelecionado){
 // ----------------------
 // 1) Processos por mês
 // ----------------------
-// $sqlMes = "
-//     SELECT DATE_FORMAT(processos.created_at, '%Y-%m') AS mes,
-//            COUNT(*) AS total
-//     FROM processos
-//     $condicoes
-//     GROUP BY DATE_FORMAT(processos.created_at, '%Y-%m')
-//     ORDER BY mes
-// ";
 $sqlMes = "
     SELECT DATE_FORMAT(processos.data_processo, '%Y-%m') AS mes,
            COUNT(*) AS total
@@ -120,11 +111,6 @@ while ($row = $resStatus->fetch_assoc()) {
     $valoresStatus[] = (int)$row['total'];
 }
 ?>
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<title>Dashboard de Processos</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   body { font-family: Arial, sans-serif; }
@@ -136,11 +122,9 @@ while ($row = $resStatus->fetch_assoc()) {
     border-radius: 10px;
     display: flex;
     justify-content: center;
-    margin-bottom: 5rem;
   }
 
   .flex-row {
-    /* border: 1px solid black; */
     width: 100%;
     margin: 2rem 0;
   }
@@ -153,7 +137,6 @@ while ($row = $resStatus->fetch_assoc()) {
   }
 
   .grafico-titulo {
-    /* border: 1px solid black; */
     font-size: small;
     text-align: center;
   }
@@ -255,6 +238,5 @@ const graficoStatus = new Chart(document.getElementById('graficoStatus'), {
     }
 });
 </script>
-</body>
-</html>
+
 

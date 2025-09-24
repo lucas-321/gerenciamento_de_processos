@@ -9,45 +9,10 @@
   <link rel="stylesheet" href="../css/lists.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <style>
-    .autocomplete-list {
-        border: 1px solid #ccc;
-        max-height: 200px;
-        overflow-y: auto;
-        position: absolute;
-        background: #fff;
-        width: 300px;
-        z-index: 1000;
-    }
-    .autocomplete-item {
-        padding: 6px;
-        cursor: pointer;
-    }
-    .autocomplete-item:hover {
-        background: #eee;
-    }
-
-    #resultados{
-        display: block;
-        margin: .68rem;
-        padding: .125rem;
-    }
-
-    #resultados li{
-        min-width: 100%;
-        text-align: start;
-    }
-
-    #resultados li:hover{
-        background: #ccc;
-    }
-    </style>
-
 </head>
 <body>
 
-  <?php 
-        include('header.php'); 
+  <?php include('header.php'); 
         include('../api/conexao.php');
 
         if (!isset($_SESSION['usuario_id'])) {
@@ -365,55 +330,33 @@
                     <?php echo $display_pasta; ?>
                 >
                     <label for="pasta"><b>Escolha a pasta:</b></label>
-                    <input 
-                        type="text" 
-                        id="buscaPasta" 
-                        
-                        value="<?php 
-                                if($local_atual != '' && $tipo_atual == 'pasta'){
-                                    echo "$local_atual";
-                                }else{
-                                    echo "placeholder='Digite para buscar pastas...'";
-                                } 
-                        ?>">
-                    <input 
-                        type="hidden" 
-                        id="pasta"
-                        name="pasta"
-                        value="<?php 
-                                if($local_atual != '' && $tipo_atual == 'pasta'){
-                                    echo "$id_atual";
-                                } 
-                        ?>">
-
-                    <ul id="resultados" style="border:1px solid #ccc; max-height:150px; overflow-y:auto; list-style:none;">
-                    </ul>
-
-                    <!-- <select id="pasta" name="pasta">
+                    <select id="pasta" name="pasta">
+                        <!-- <option value="">Selecione uma pasta</option> -->
+                        <!-- Opções de pastas aqui -->
                         <?php
 
-                            // if($local_atual != '' && $tipo_atual == 'pasta'){
-                            //     echo "<option value='$id_atual'>$local_atual</option>";
-                            // }else{
-                            //     echo "<option value=''>Selecione uma pasta</option>";
-                            // }
+                            if($local_atual != '' && $tipo_atual == 'pasta'){
+                                echo "<option value='$id_atual'>$local_atual</option>";
+                            }else{
+                                echo "<option value=''>Selecione uma pasta</option>";
+                            }
 
-                            // $sql = "SELECT id, nome
-                            // FROM pastas
-                            // WHERE ativo = 1
-                            // ORDER BY nome";
-                            // $result = mysqli_query($conexao, $sql);
+                            $sql = "SELECT id, nome
+                            FROM pastas
+                            WHERE ativo = 1
+                            ORDER BY nome";
+                            $result = mysqli_query($conexao, $sql);
 
-                            // if (mysqli_num_rows($result) > 0) {
-                            //     while ($dados = mysqli_fetch_assoc($result)) {
-                            //         echo "<option value='{$dados['id']}'>{$dados['nome']}</option>";
-                            //     }
-                            // } else {
-                            //     echo "<option>Nenhuma pasta encontrada.</option>";
-                            // }
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($dados = mysqli_fetch_assoc($result)) {
+                                    echo "<option value='{$dados['id']}'>{$dados['nome']}</option>";
+                                }
+                            } else {
+                                echo "<option>Nenhuma pasta encontrada.</option>";
+                            }
                         ?>
                     </select>
-                </div> -->
+                </div>
 
                 <!-- Status, discordo disso aqui, mas pediram assim -->
                 <div id="select-status" class="form-group" style="width: 100%;">
@@ -571,54 +514,6 @@
             // el.selectedIndex = 0;
         });
     }
-
-    //Busca de pasta por termo
-    document.addEventListener('DOMContentLoaded', () => {
-    const input = document.getElementById('buscaPasta');
-    // const pasta = document.getElementById('pasta');
-    const resultados = document.getElementById('resultados');
-    let timeout;
-
-    input.addEventListener('input', () => {
-        clearTimeout(timeout);
-        const termo = input.value.trim();
-        if (termo.length < 1) {
-        resultados.innerHTML = '';
-        return;
-        }
-
-        timeout = setTimeout(() => {
-        fetch(`utils/buscar_pasta.php?q=${encodeURIComponent(termo)}`)
-            .then(resp => resp.json())
-            .then(data => {
-            resultados.innerHTML = '';
-            if (!data.length) {
-                resultados.innerHTML = '<li style="padding:4px">Nenhuma pasta encontrada</li>';
-                return;
-            }
-
-            data.forEach(item => {
-                const li = document.createElement('li');
-                li.textContent = item.nome;  // usa o campo "nome" retornado
-                li.style.padding = '4px';
-                li.style.cursor = 'pointer';
-                li.addEventListener('click', () => {
-                input.value = item.nome;
-                resultados.innerHTML = '';
-                // Se precisar guardar o ID, você pode criar um input hidden:
-                document.getElementById('pasta').value = item.id;
-                });
-                resultados.appendChild(li);
-            });
-            })
-            .catch(err => {
-            console.error('Erro ao buscar pastas:', err);
-            resultados.innerHTML = '<li style="padding:4px">Erro na busca</li>';
-            });
-        }, 300); // delay para evitar muitas requisições
-    });
-    });
-    //Fim
   </script>
 
 </body>

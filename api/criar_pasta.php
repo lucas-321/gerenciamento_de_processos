@@ -12,14 +12,18 @@ header('Content-Type: application/json'); // Para garantir que o navegador enten
     }
 
     $nome = trim($_POST["nome"]);
+    $letra = trim($_POST["letra"]);
+    $numero = trim($_POST["numero"]);
+    $assunto = trim($_POST["assunto"]);
+    $status = trim($_POST["status"]);
     $cor = trim($_POST["cor"]);
     $criado_por = $_SESSION["usuario_id"];
 
     $conexao->begin_transaction();
 
     try {
-        $stmt = $conexao->prepare("INSERT INTO pastas (nome, cor, ativo, created_at, criado_por) VALUES (?, ?,  1, NOW(), ?)");
-        $stmt->bind_param("ssi", $nome, $cor, $criado_por);
+        $stmt = $conexao->prepare("INSERT INTO pastas (nome, letra, numero, assunto, status, cor, ativo, created_at, criado_por) VALUES (?, ?, ?, ?, ?, ?,  1, NOW(), ?)");
+        $stmt->bind_param("ssssssi", $nome, $letra, $numero, $assunto, $status, $cor, $criado_por);
         $stmt->execute();
 
         $novo_id = $conexao->insert_id;

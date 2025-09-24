@@ -6,7 +6,7 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Edição de Sessão</title>
+  <title>Edição de Processo</title>
 
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/forms.css">
@@ -295,8 +295,9 @@
 
   // Aciona quando sair do campo (ou pode usar 'input' se quiser mais instantâneo)
   // nProtocoloInput.addEventListener("blur", verificarDuplicidade);
+  // dataProcessoInput.addEventListener("blur", verificarDuplicidade);
   nProtocoloInput.addEventListener("change", verificarDuplicidade);
-  dataProcessoInput.addEventListener("blur", verificarDuplicidade);
+  dataProcessoInput.addEventListener("change", verificarDuplicidade);
   //Fim
 
   function bloqueiaAlteracao(){

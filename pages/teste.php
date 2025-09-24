@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/forms.css">
   <link rel="stylesheet" href="../css/modal.css">
-  <link rel="stylesheet" href="../css/documentos.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
     .order-info {
@@ -35,10 +34,6 @@
       display: none;
     }
 
-    .campo_exposto {
-      display: flex;
-    }
-
     fieldset {
       margin: .625rem;
       border-radius: 5px;
@@ -57,6 +52,7 @@
       display: flex;
       justify-content: space-between;
     }
+
   </style>
 
   <script type="text/javascript" src="https://js.nicedit.com/nicEdit-latest.js"></script>
@@ -91,7 +87,6 @@
                 <option value="inexistencia_imoveis">Inexistência de Imóveis</option>
                 <option value="lancamento_numero">Lançamento de Nº</option>
                 <option value="lancamento">Lançamento de Imóvel</option>
-                <option value="metragem">Metragem</option>
                 <option value="valor_venal">Valor Venal</option>
             </select>
         </div>
@@ -211,33 +206,12 @@
 
         </fieldset>
 
-        <!-- <fieldset class="campo_oculto" id="inexistencia_imoveis"> -->
-          <!-- <legend><b>Inexistência de Imóveis</b></legend>
-
-          <div class="form-group">
-              
-          </div> -->
-
-        <!-- </fieldset> -->
-
         <fieldset class="campo_oculto" id="numero_porta">
           <legend><b>Lançamento de nº</b></legend>
 
           <div class="form-group">
               <label for="numero">Nº da Porta:</label>
               <input type="number" name="numero" id="numero">
-          </div>
-
-        </fieldset>
-
-        <fieldset class="campo_oculto" id="metragem">
-          <legend><b>Metragem</b></legend>
-
-          <div class="form-group">
-              <label for="descricao_metragem">Descrição da Metragem:</label>
-              <div class="editor">
-                <textarea name="descricao_metragem" id="descricao_metragem"></textarea>
-              </div>
           </div>
 
         </fieldset>
@@ -275,19 +249,6 @@
   </div>
 
   <script>
-    // document.getElementById("certidaoForm").addEventListener("submit", function(e) {
-    //   e.preventDefault();
-
-    //   const form = document.getElementById("certidaoForm");
-    //   const formData = new FormData(form);
-    //   fetch("../api/criar_certidao.php", {
-    //     method: "POST",
-    //     body: formData
-    //   })
-    //   .then(res => res.json())
-    //   .then(data => alert(data.mensagem))
-    //   .then(window.location.href ="painel_analista.php");
-    // });
 
     // document.getElementById("certidaoForm").addEventListener("submit", function(e) {
     //   e.preventDefault();
@@ -323,7 +284,6 @@
     nicEditors.findEditor('trecho_documento')?.saveContent();
     nicEditors.findEditor('endereco_atual')?.saveContent();
     nicEditors.findEditor('informacoes_adicionais').saveContent();
-    nicEditors.findEditor('descricao_metragem')?.saveContent();
     // Adicione aqui outras instâncias se criar mais
 
     const formData = new FormData(this);
@@ -349,27 +309,6 @@
     });
 
 
-    // function exibeCampos() {
-    //     let campos = document.querySelectorAll('.campo_oculto');
-    //     let tipoCertidao = document.getElementById('tipo').value;
-
-    //     console.log(tipoCertidao);
-
-    //     campos.forEach(campo => {
-    //         campo.style.display = 'none';
-    //     });
-
-    //     if(tipoCertidao == 'lancamento_numero'){
-    //         document.getElementById('numero_porta').style = 'display: flex';
-    //     }else if(tipoCertidao == 'valor_venal'){
-    //         document.getElementById('valor_venal').style = 'display: flex';
-    //     }else if(tipoCertidao == 'metragem'){
-    //         document.getElementById('comprovacao_endereco').style = 'display: flex';
-    //     }
-    // }
-
-    // bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
-
     let nicTrechoInit = false;
 
     function exibeCampos() {
@@ -392,12 +331,6 @@
           }
       } else if (tipo === 'comprovacao_pagamento_itiv') {
           document.getElementById('comprovacao_pagamento_itiv').style.display = 'flex';
-      } else if (tipo === 'metragem') {
-          document.getElementById('metragem').style.display = 'flex';
-          if (!nicTrechoInit) {                    // só inicializa uma vez
-              new nicEditor({fullPanel:true}).panelInstance('descricao_metragem');
-              nicTrechoInit = true;
-          }
       }
     }
 
@@ -405,18 +338,8 @@
         new nicEditor({fullPanel:true}).panelInstance('informacoes_adicionais');
         new nicEditor({fullPanel:true}).panelInstance('endereco');
     });
-
-    // bkLib.onDomLoaded(function() {
-      // Se quiser transformar todas as textareas de uma vez:
-      // nicEditors.allTextAreas();
-
-      // Ou apenas IDs específicos:
-      // new nicEditor({fullPanel: true}).panelInstance('trecho_documento');
-      // new nicEditor({fullPanel: true}).panelInstance('informacoes_adicionais');
-    // });
     
   </script>
-  <!-- <script src="../js/modal.js"></script> -->
   <script src="../js/masks.js"></script>
 
 </body>

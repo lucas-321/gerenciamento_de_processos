@@ -23,7 +23,7 @@
 
     <ul class="list-title">
         <li>Nome</li>
-        <li>Cor</li>
+        <!-- <li>Cor</li> -->
         <li></li>
         <li></li>
     </ul>
@@ -57,8 +57,8 @@
         while ($dados = mysqli_fetch_assoc($result)) {
 
             echo "<ul class='list-items'>
-                    <li>{$dados['nome']}</li>
-                    <li>{$dados['cor']}</li>
+                    <li title='{$dados['nome']}'>{$dados['nome']}</li>
+                    <!--<li>{$dados['cor']}</li>-->
                     <li>
                         <form method='POST' action='editar_pasta.php'>
                             <input type='hidden' name='id' value='{$dados['id']}'>
