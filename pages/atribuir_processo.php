@@ -412,8 +412,8 @@
                             //     echo "<option>Nenhuma pasta encontrada.</option>";
                             // }
                         ?>
-                    </select>
-                </div> -->
+                    </select>-->
+                </div>
 
                 <!-- Status, discordo disso aqui, mas pediram assim -->
                 <div id="select-status" class="form-group" style="width: 100%;">

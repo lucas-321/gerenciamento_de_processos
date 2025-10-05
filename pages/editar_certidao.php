@@ -224,7 +224,8 @@
 
             <div class="form-group">
                 <label for="valor_itiv">Valor do ITIV:</label>
-                <input type="number" name="valor_itiv" id="valor_itiv" step="0.01"  value="<?php echo $valor_itiv; ?>">
+                <!-- <input type="number" name="valor_itiv" id="valor_itiv" step="0.01"  value="<?php echo $valor_itiv; ?>"> -->
+                <input type="text" name="valor_itiv" id="valor_itiv" oninput="filtrarNumeros(this)" value="<?php echo $valor_itiv; ?>">
             </div>
 
           </div>
@@ -238,7 +239,8 @@
 
             <div class="form-group">
                 <label for="valor_transacao">Valor da Transação:</label>
-                <input type="number" name="valor_transacao" id="valor_transacao" step="0.01" value="<?php echo $valor_transacao; ?>">
+                <!-- <input type="number" name="valor_transacao" id="valor_transacao" step="0.01" value="<?php echo $valor_transacao; ?>"> -->
+                <input type="text" name="valor_transacao" id="valor_transacao" oninput="filtrarNumeros(this)" value="<?php echo $valor_transacao; ?>">
             </div>
 
           </div>
@@ -318,7 +320,8 @@
 
           <div class="form-group">
               <label for="valor_venda">Valor do Imóvel:</label>
-              <input type="number" name="valor_venda" id="valor_venda" step="0.01" value="<?php echo htmlspecialchars($valor_venal); ?>">
+              <!-- <input type="number" name="valor_venda" id="valor_venda" step="0.01" value="<?php echo htmlspecialchars($valor_venal); ?>"> -->
+              <input type="text" name="valor_venda" id="valor_venda" oninput="filtrarNumeros(this)" value="<?php echo htmlspecialchars($valor_venal); ?>">
           </div>
 
         </fieldset>
@@ -362,6 +365,16 @@
       nicEditors.findEditor('descricao_metragem')?.saveContent();
       // Adicione aqui outras instâncias se criar mais
 
+      // === TRATAMENTO DE CAMPOS MONETÁRIOS ===
+      const camposMonetarios = ["valor_itiv", "valor_venda", "valor_transacao"]; 
+      camposMonetarios.forEach(id => {
+          const campo = document.getElementById(id);
+          if (campo && campo.value) {
+              campo.value = campo.value.replace(/\./g, '').replace(',', '.');
+          }
+      });
+      // === FIM ===
+
       const formData = new FormData(this);
       fetch("../api/editar_certidao.php", {
         method: "POST",
@@ -382,6 +395,12 @@
       })
       .catch(err => alert("Erro: " + err.message));
     });
+
+    function filtrarNumeros(campo) {
+      campo.value = campo.value
+        .replace(/[^0-9.,]/g, '')   // mantém apenas números, ponto e vírgula
+        .replace(/(,.*),/g, '$1');  // impede mais de uma vírgula
+    }
 
     let nicTrechoInit = false;
 
