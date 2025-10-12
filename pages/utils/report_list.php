@@ -47,7 +47,7 @@
     }
 
     if (!empty($assunto)) {
-        $condicoes .= " AND (assunto = $assunto)";
+        $condicoes .= " AND (processos.assunto = $assunto)";
     }
 
     if (!empty($usuario_localizado)) {
@@ -100,6 +100,8 @@
             LEFT JOIN pastas ON localizacoes.destino_tipo = 'pasta' AND localizacoes.destino_id = pastas.id
             $condicoes
             ORDER BY assuntos.nome ASC, processos.created_at DESC";
+
+    // echo "$sql";
 
     $result = mysqli_query($conexao, $sql);
 

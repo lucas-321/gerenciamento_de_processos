@@ -309,7 +309,7 @@
           <div class="form-group">
               <label for="descricao_metragem">Descrição da Metragem:</label>
               <div class="editor">
-                <textarea name="descricao_metragem" id="descricao_metragem"><?php echo $descricao_metragem; ?></textarea>
+                <textarea name="descricao_metragem" id="descricao_metragem"><?php echo htmlspecialchars(strip_tags($descricao_metragem), ENT_QUOTES, 'UTF-8'); ?></textarea>
               </div>
           </div>
 

@@ -367,15 +367,14 @@
                     <label for="pasta"><b>Escolha a pasta:</b></label>
                     <input 
                         type="text" 
-                        id="buscaPasta" 
-                        
-                        value="<?php 
-                                if($local_atual != '' && $tipo_atual == 'pasta'){
-                                    echo "$local_atual";
-                                }else{
-                                    echo "placeholder='Digite para buscar pastas...'";
-                                } 
-                        ?>">
+                        id="buscaPasta"
+                        <?php 
+                            if($local_atual != '' && $tipo_atual == 'pasta'){
+                                echo "value = '$local_atual'";
+                            }else{
+                                echo "placeholder='Digite para buscar pastas...'";
+                            } 
+                        ?>>
                     <input 
                         type="hidden" 
                         id="pasta"
