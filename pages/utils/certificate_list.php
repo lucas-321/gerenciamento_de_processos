@@ -58,7 +58,7 @@
         }
 
         if (!empty($assunto)) {
-            $condicoes .= " AND (assunto = $assunto)";
+            $condicoes .= " AND (processos.assunto = $assunto)";
         }
 
         if (!empty($inscricao)) {
