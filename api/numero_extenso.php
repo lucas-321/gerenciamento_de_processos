@@ -1,6 +1,19 @@
 <?php
 function numeroPorExtenso($valor)
 {
+    // Garante que o valor é numérico e converte para float
+    if (is_string($valor)) {
+        $valor = trim($valor);
+        $valor = str_replace(['R$', '.', ','], ['', '', '.'], $valor);
+    }
+
+    if (!is_numeric($valor)) {
+        $valor = 0;
+    }
+
+    $valor = (float)$valor;
+    //Fim
+
     $valor = number_format($valor, 2, '.', '');
     list($inteiro, $centavos) = explode('.', $valor);
     $inteiro = (int)$inteiro;
