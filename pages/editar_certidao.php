@@ -363,7 +363,14 @@
       nicEditors.findEditor('endereco_atual')?.saveContent();
       nicEditors.findEditor('informacoes_adicionais').saveContent();
       nicEditors.findEditor('descricao_metragem')?.saveContent();
+
       // Adicione aqui outras instâncias se criar mais
+
+      limparEditorVazio('endereco');
+      limparEditorVazio('trecho_documento');
+      limparEditorVazio('endereco_atual');
+      limparEditorVazio('informacoes_adicionais');
+      limparEditorVazio('descricao_metragem');
 
       // === TRATAMENTO DE CAMPOS MONETÁRIOS ===
       const camposMonetarios = ["valor_itiv", "valor_venda", "valor_transacao"]; 
@@ -404,39 +411,86 @@
 
     let nicTrechoInit = false;
 
-    function exibeCampos() {
-      document.querySelectorAll('.campo_oculto').forEach(c => c.style.display = 'none');
-      const tipo = document.getElementById('tipo').value;
+    // function exibeCampos() {
+    //   document.querySelectorAll('.campo_oculto').forEach(c => c.style.display = 'none');
+    //   const tipo = document.getElementById('tipo').value;
 
-      if (tipo === 'lancamento_numero') {
-          document.getElementById('numero_porta').style.display = 'flex';
+    //   if (tipo === 'lancamento_numero') {
+    //       document.getElementById('numero_porta').style.display = 'flex';
 
-      } else if (tipo === 'valor_venal') {
-          document.getElementById('valor_venal').style.display = 'flex';
+    //   } else if (tipo === 'valor_venal') {
+    //       document.getElementById('valor_venal').style.display = 'flex';
 
-      } else if (tipo === 'comprovacao_endereco') {
-          document.getElementById('comprovacao_endereco').style.display = 'flex';
+    //   } else if (tipo === 'comprovacao_endereco') {
+    //       document.getElementById('comprovacao_endereco').style.display = 'flex';
 
-          if (!nicTrechoInit) {                    // só inicializa uma vez
-              new nicEditor({fullPanel:true}).panelInstance('trecho_documento');
-              new nicEditor({fullPanel:true}).panelInstance('endereco_atual');
-              nicTrechoInit = true;
-          }
-      } else if (tipo === 'comprovacao_pagamento_itiv') {
-          document.getElementById('comprovacao_pagamento_itiv').style.display = 'flex';
-      } else if (tipo === 'metragem') {
-          document.getElementById('metragem').style.display = 'flex';
-          if (!nicTrechoInit) {                    // só inicializa uma vez
-              new nicEditor({fullPanel:true}).panelInstance('descricao_metragem');
-              nicTrechoInit = true;
-          }
-      }
+    //       if (!nicTrechoInit) {                    // só inicializa uma vez
+    //           new nicEditor({fullPanel:true}).panelInstance('trecho_documento');
+    //           new nicEditor({fullPanel:true}).panelInstance('endereco_atual');
+    //           nicTrechoInit = true;
+    //       }
+    //   } else if (tipo === 'comprovacao_pagamento_itiv') {
+    //       document.getElementById('comprovacao_pagamento_itiv').style.display = 'flex';
+    //   } else if (tipo === 'metragem') {
+    //       document.getElementById('metragem').style.display = 'flex';
+    //       if (!nicTrechoInit) {                    // só inicializa uma vez
+    //           new nicEditor({fullPanel:true}).panelInstance('descricao_metragem');
+    //           nicTrechoInit = true;
+    //       }
+    //   }
+    // }
+
+    function exibeCampos(inicial = false) {
+        document.querySelectorAll('fieldset').forEach(f => f.style.display = 'none');
+
+        const tipo = document.getElementById('tipo').value;
+
+        if (tipo === 'comprovacao_endereco') {
+            document.getElementById('comprovacao_endereco').style.display = 'flex';
+            initNicEdit('trecho_documento');
+            initNicEdit('endereco_atual');
+
+        } else if (tipo === 'metragem') {
+            document.getElementById('metragem').style.display = 'flex';
+            initNicEdit('descricao_metragem');
+
+        } else if (tipo === 'lancamento_numero') {
+            document.getElementById('numero_porta').style.display = 'flex';
+
+        } else if (tipo === 'valor_venal') {
+            document.getElementById('valor_venal').style.display = 'flex';
+
+        } else if (tipo === 'comprovacao_pagamento_itiv') {
+            document.getElementById('comprovacao_pagamento_itiv').style.display = 'flex';
+        }
     }
 
     bkLib.onDomLoaded(function () {
         new nicEditor({fullPanel:true}).panelInstance('informacoes_adicionais');
         new nicEditor({fullPanel:true}).panelInstance('endereco');
+
+        exibeCampos(true);
     });
+
+
+    function limparEditorVazio(id) {
+        const textarea = document.getElementById(id);
+        if (!textarea) return;
+
+        const conteudo = textarea.value
+            .replace(/<br\s*\/?>/gi, '')
+            .replace(/&nbsp;/gi, '')
+            .trim();
+
+        textarea.value = conteudo === '' ? '' : textarea.value;
+    }
+
+    function initNicEdit(id) {
+        if (!document.getElementById(id)) return;
+        if (nicEditors.findEditor(id)) return;
+
+        new nicEditor({fullPanel:true}).panelInstance(id);
+    }
 
   </script>
   <script src="../js/masks.js"></script>

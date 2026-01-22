@@ -148,6 +148,9 @@
                         <input type="radio" name="status" value="Sob análise" onclick="mostrarSelect('sob-analise')">Sob Análise
                     </label>
                     <label>
+                        <input type="radio" name="status" value="Vistoria" onclick="mostrarSelect('vistoria')">Vistoria
+                    </label>
+                    <label>
                         <input type="radio" name="status" value="Pendência" onclick="mostrarSelect('pendencia')">
                         Pendência
                     </label>
@@ -176,6 +179,28 @@
                             <button id="despachoBtn" class="form-btn green-btn" style="display: none;" type="button" onclick="criarDespacho()">Criar Despacho</button>
 
                         </label>
+                        
+                    </div>
+
+                    <!--<div id="arquivos">
+                        <input type="file" name="arquivo" id="arquivo">
+                    </div>-->
+                </div>
+
+                <div id="vistoria" class="destiny-options" style="display:none;">
+                    <label for="usuario"><b>Ação:</b></label>
+                    <div class="radios">
+
+                        <label>
+                            <button id="certidaoBtn" class="form-btn green-btn" type="button" onclick="agendarVistoria()">Agendar</button>
+                        </label>
+
+                        <!-- <label>
+                            <input type="radio" name="status" value="Despacho elaborado" onclick="mostrarArquivo('arquivos'), showBtn('despacho')">Despacho
+
+                            <button id="despachoBtn" class="form-btn green-btn" style="display: none;" type="button" onclick="criarDespacho()">Criar Despacho</button>
+
+                        </label> -->
                         
                     </div>
 
@@ -225,11 +250,14 @@
     function mostrarSelect(tipo) {
         // Esconde todos primeiro
         document.getElementById('sob-analise').style.display = 'none';
+        document.getElementById('vistoria').style.display = 'none';
         document.getElementById('pendencia-box').style.display = 'none';
 
         // Mostra apenas o que foi selecionado
         if (tipo === 'sob-analise') {
             document.getElementById('sob-analise').style.display = 'flex';
+        }else if (tipo === 'vistoria') {
+            document.getElementById('vistoria').style.display = 'flex';
         } else if (tipo === 'pendencia') {
             document.getElementById('pendencia-box').style.display = 'flex';
         }
@@ -284,6 +312,24 @@
         const form = document.createElement("form");
         form.method = "POST";
         form.action = "elaborar_certidao.php";
+
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "id";
+        input.value = id;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function agendarVistoria() {
+        const id = document.querySelector("input[name='id']").value;
+
+        // Cria um form temporário para enviar os dados via POST
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = "agendar_vistoria.php";
 
         const input = document.createElement("input");
         input.type = "hidden";

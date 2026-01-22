@@ -329,6 +329,12 @@
     nicEditors.findEditor('descricao_metragem')?.saveContent();
     // Adicione aqui outras instâncias se criar mais
 
+    limparEditorVazio('endereco');
+    limparEditorVazio('trecho_documento');
+    limparEditorVazio('endereco_atual');
+    limparEditorVazio('informacoes_adicionais');
+    limparEditorVazio('descricao_metragem');
+
     // === TRATAMENTO DE CAMPOS MONETÁRIOS ===
     const camposMonetarios = ["valor_itiv", "valor_venda", "valor_transacao"]; 
     camposMonetarios.forEach(id => {
@@ -432,6 +438,18 @@
       // new nicEditor({fullPanel: true}).panelInstance('trecho_documento');
       // new nicEditor({fullPanel: true}).panelInstance('informacoes_adicionais');
     // });
+
+    function limparEditorVazio(id) {
+        const textarea = document.getElementById(id);
+        if (!textarea) return;
+
+        const conteudo = textarea.value
+            .replace(/<br\s*\/?>/gi, '')
+            .replace(/&nbsp;/gi, '')
+            .trim();
+
+        textarea.value = conteudo === '' ? '' : textarea.value;
+    }
     
   </script>
   <!-- <script src="../js/modal.js"></script> -->

@@ -22,6 +22,8 @@
     $objeto = isset($_GET['objeto']) ? trim($_GET['objeto']) : '';
     $tipo = isset($_GET['tipo']) ? trim($_GET['tipo']) : '';
 
+    $n_protocolo = isset($_GET['n_protocolo']) ? trim($_GET['n_protocolo']) : '';
+
     if (!empty($nome_usuario)) {
         $condicoes .= " AND (nome_usuario LIKE '%$nome_usuario%')";
     }
@@ -52,6 +54,10 @@
         $periodo = "A partir de ".date('d/m/Y', strtotime($data_inicial))."";
     } else if (!empty($data_final)) {
         $periodo = "Até ".date('d/m/Y', strtotime($data_final))."";
+    }
+
+    if (!empty($n_protocolo)) {
+        $condicoes .= " AND (detalhes LIKE '%$n_protocolo%')";
     }
 
     echo "<div class='list-title'>

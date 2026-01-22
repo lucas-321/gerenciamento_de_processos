@@ -37,11 +37,17 @@
         <div class="filter-row">
 
             <div class="filter-group">
+                <label for="n_protocolo">Nº de Protocolo</label>
+                <input type="text" name="n_protocolo" placeholder="" value="<?= isset($_GET['n_protocolo']) ? htmlspecialchars($_GET['n_protocolo']) : '' ?>">
+            </div>
+
+            <div class="filter-group">
                 <label for="tipo">Tipo</label>
                 <select id="tipo" name="tipo">
                     <option value=""></option>
                     <option value="criar">Criação</option>
-                    <option value="alterar">Alteração</option>
+                    <!-- <option value="alterar">Alteração</option> -->
+                    <option value="editar">Alteração</option>
                     <option value="deletar">Exclusão</option>
                     <option value="analisar">Análise</option>
                     <option value="atribuir">Atribuição</option>

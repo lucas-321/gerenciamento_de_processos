@@ -230,7 +230,7 @@
         </p>
 
         <div class="assinatura">
-            <span>Coordenação/DRI</span>
+            <span>Gerência/DRI</span>
         </div>
 
       </div>
