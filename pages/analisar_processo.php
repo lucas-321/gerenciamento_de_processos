@@ -67,6 +67,21 @@
         // echo "$sql_certidoes";
         //Fim
 
+        // Verificar se existem certidões
+        $sql_vistorias = "SELECT id
+                FROM vistorias
+                WHERE processo = $_POST[id]
+                AND ativo = 1";
+        $result_vistorias = mysqli_query($conexao, $sql_vistorias);
+
+        if(mysqli_num_rows($result_vistorias) > 0) {
+            $existe = true;
+        }else{
+            $existe = false;
+        }
+        // echo "$sql_vistorias";
+        //Fim
+
   ?>
 
   <div class="content">
@@ -147,9 +162,14 @@
                     <label>
                         <input type="radio" name="status" value="Sob análise" onclick="mostrarSelect('sob-analise')">Sob Análise
                     </label>
-                    <label>
-                        <input type="radio" name="status" value="Vistoria" onclick="mostrarSelect('vistoria')">Vistoria
-                    </label>
+
+                    <?php
+                        if(!$existe){
+                            echo "<label>
+                                    <input type='radio' name='status' value='Vistoria' onclick='mostrarSelect('vistoria')'>Vistoria
+                                </label>";
+                        }
+                    ?>
                     <label>
                         <input type="radio" name="status" value="Pendência" onclick="mostrarSelect('pendencia')">
                         Pendência

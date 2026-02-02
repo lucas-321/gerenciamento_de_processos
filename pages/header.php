@@ -66,6 +66,9 @@
                                 <li class="subitem">
                                     <a href='painel_analista.php'>Meus Processos</a>
                                 </li>
+                                <li class="subitem">
+                                    <a href='lista_visitas.php'>Vistorias</a>
+                                </li>
 
                             </ul>
                         </li>
