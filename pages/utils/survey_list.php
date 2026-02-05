@@ -1,3 +1,5 @@
+<!-- <?php include('utils/calendario_vistorias.php'); ?> -->
+
 <?php include('utils/process_filter.php'); ?>
 
 <div class="list-model">
@@ -5,7 +7,7 @@
         <li>Nº Protocolo</li>
         <li>Assunto</li>
         <li>Interessado</li>
-        <li>Localização</li>
+        <li>Data</li>
         <!-- <li></li> -->
         <li></li>
         <li></li>
@@ -89,6 +91,7 @@
                agentes.nome AS nome_usuario_destino,
                pastas.nome,
                vistorias.id AS id_vistoria,
+               vistorias.data_visita AS data_v,
                vistorias.status AS status_vistoria
         FROM processos
         INNER JOIN assuntos ON processos.assunto = assuntos.id
@@ -107,7 +110,8 @@
         LEFT JOIN pastas ON localizacoes.destino_tipo = 'pasta' AND localizacoes.destino_id = pastas.id
         LEFT JOIN setores ON localizacoes.destino_tipo = 'setor' AND localizacoes.destino_id = setores.id
         $condicoes
-        ORDER BY processos.created_at DESC
+        AND vistorias.ativo = 1
+        ORDER BY data_visita DESC
         LIMIT $porPagina OFFSET $offset";
 
         // echo $sql;
@@ -162,10 +166,7 @@
                     <li>{$dados['n_assunto']}</li>
                     <li>{$dados['nome_interessado']}</li>
                     <li>
-                        {$destino_nome}<br>
-                        <span style='text-transform: capitalize;'>
-                            {$status}
-                        </span>
+                        ".date('d/m/Y', strtotime($dados['data_v']))."
                     </li>";
 
             echo "
@@ -191,33 +192,27 @@
     }else{
         echo "<div class='list-items'><span>Não há processos cadastrados</span></div>";
     }
-                    
-            if ($_SESSION['categoria'] == 1 || $_SESSION['categoria'] == 2 || $_SESSION['categoria'] == 3) {
-
-                echo "<div class='list-items'>
-                        <a href='cadastro_processo.php'>
-                            <button class='list-btn blue-btn'>Novo Processo</button>
-                        </a>
-                    </div>";
-            }
+                
 
             $sqlTotal = "SELECT COUNT(*) as total 
-             FROM processos
-             INNER JOIN assuntos ON processos.assunto = assuntos.id
-             LEFT JOIN (
-                 SELECT l1.*
-                 FROM localizacoes l1
-                 INNER JOIN (
-                     SELECT id_processo, MAX(localizado_em) AS max_localizado
-                     FROM localizacoes
-                     WHERE ativo = 1
-                     GROUP BY id_processo
-                 ) l2 ON l1.id_processo = l2.id_processo AND l1.localizado_em = l2.max_localizado
-             ) AS localizacoes ON localizacoes.id_processo = processos.id
-             LEFT JOIN agentes ON localizacoes.destino_tipo = 'usuario' AND localizacoes.destino_id = agentes.id
-             LEFT JOIN pastas ON localizacoes.destino_tipo = 'pasta' AND localizacoes.destino_id = pastas.id
-             LEFT JOIN setores ON localizacoes.destino_tipo = 'setor' AND localizacoes.destino_id = setores.id
-             $condicoes";
+            FROM processos
+            INNER JOIN vistorias ON processos.id = vistorias.processo
+            LEFT JOIN (
+                SELECT l1.*
+                FROM localizacoes l1
+                INNER JOIN (
+                    SELECT id_processo, MAX(localizado_em) AS max_localizado
+                    FROM localizacoes
+                    WHERE ativo = 1
+                    GROUP BY id_processo
+                ) l2 ON l1.id_processo = l2.id_processo AND l1.localizado_em = l2.max_localizado
+            ) AS localizacoes ON localizacoes.id_processo = processos.id
+            LEFT JOIN agentes ON localizacoes.destino_tipo = 'usuario' AND localizacoes.destino_id = agentes.id
+            LEFT JOIN pastas ON localizacoes.destino_tipo = 'pasta' AND localizacoes.destino_id = pastas.id
+            LEFT JOIN setores ON localizacoes.destino_tipo = 'setor' AND localizacoes.destino_id = setores.id
+             $condicoes
+             AND vistorias.ativo = 1
+             ";
 
             //  echo "$sqlTotal";
              
@@ -294,11 +289,11 @@
     }
 
     function deletar(botao) {
-        if (confirm('Você tem certeza que deseja excluir permanentemente este processo?')) {
+        if (confirm('Você tem certeza que deseja excluir permanentemente este agendamento?')) {
             const form = botao.closest("form");
             const formData = new FormData(form);
 
-            fetch("../api/excluir_processo.php", {
+            fetch("../api/excluir_vistoria.php", {
                 method: "POST",
                 body: formData
             })
